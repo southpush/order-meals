@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 import os
 from datetime import datetime
-from flask import render_template, session, redirect, url_for
+from flask import render_template, request, jsonify
 
 from . import main
 
 
-@main.route("/", methods=["GET", "POST"])
-def index():
-    env = os.environ.get("DEV_DATABASE_URL")
-    return render_template("index.html", env=env)
+@main.route("/", methods=["POST", "GET"])
+def get_task():
+    env = "hello, world"
+    return jsonify({"data:": env, "id": "hello a "})
 
 
 

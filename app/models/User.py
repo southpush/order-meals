@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-from . import db
+from .. import db
 
 
-class Role(db.Model):
-    __tablename__ = "test1"
+class User(db.Model):
+    __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
 
     def __repr__(self):
-        return "<Role %r>" % self.name
+        return "<User %r>" % self.name
+
+
