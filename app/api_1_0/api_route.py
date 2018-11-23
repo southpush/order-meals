@@ -5,4 +5,4 @@ from .api_user import getUser
 
 api_user = Api(api_1_0)
 
-api_user.add_resource(getUser, '/getuser')
+api_user.add_resource(getUser, '/getuser', )
