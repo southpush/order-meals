@@ -5,7 +5,7 @@ import os
 
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SECRET_KEY = "258741"
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     MAIL_SUBJECT_PREFIX = '[今天吃什么]'
