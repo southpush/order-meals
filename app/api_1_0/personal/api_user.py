@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import requests
 from flask_restful import Resource
 from flask_restful import reqparse
 from flask import jsonify
@@ -26,8 +26,9 @@ class userLogin(Resource):
         # 个人用户，如果已经验证过手机，就返回一个token
         # 否则返回错误代码，小程序跳转但验证手机页面
         user = get_user_personal(openid)
+        token = user.generate_auth_token()
         if user:
-            return jsonify({"token": getToken_personal(user.id), "id": user.id})
+            return jsonify({"token": token.decode("ascii"), "id": user.id})
         else:
             return {"errMsg": "Can't find this user"}, 404
 
@@ -39,15 +40,23 @@ class Register_personal(Resource):
         data.add_argument("code", type=str)
         data.add_argument("phone", type=str)
         data.add_argument("password", type=str)
+        data.add_argument("nickname", type=str)
+        data.add_argument("img_url", type=str)
         code = data.parse_args()["code"]
         phone = data.parse_args()["phone"]
         password = data.parse_args()["password"]
+        nickname = data.parse_args()["nickname"]
+        img_url = data.parse_args()["img_url"]
+        img = requests.get(img_url).content
+
         openid = getOpenid(code)
 
         print("phone = " + phone)
         print("password = " + password)
         print("code = " + code)
         print("openid = " + openid)
+        print("nickname = " + nickname)
+        print(img)
 
         # 设一个状态，1代表缺失code或phone
         # 2代表openid已被注册
@@ -60,10 +69,10 @@ class Register_personal(Resource):
         elif get_user_personal(phone=phone):
             return {"errMsg": "This phone has been registered", "errCode": 3}, 400
         else:
-            user = user_personal(openid=openid, phone=phone, password=password)
+            user = user_personal(openid=openid, phone=phone, password=password, head_img=img,
+                                 nickname=nickname)
             if add_user_personal(user):
                 token = user.generate_auth_token()
-                # role 0 代表个人用户，1代表商铺
                 return jsonify({"token": token.decode("ascii")})
             else:
                 return {"errMsg": 'add user error', "errCode": 4}, 400

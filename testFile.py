@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+import requests
 def login_required(parser):
     def decorator(func):
         def wrapper(*args, **kw):
@@ -19,9 +20,6 @@ def test():
 
 
 if __name__ == '__main__':
-    s = Serializer('123456', expires_in=7200)
-    token = s.dumps({"id": 8}).decode("ascii")
-    sa = Serializer("123456")
-    data = sa.loads(token)
-    print(token)
-    print(sa.loads(token))
+    url = "https://wx.qlogo.cn/mmopen/vi_32/Y9mCvSdYhRNicK2ib0C7Bdv1oPOyCHQHb7IV6IchryJ2gtdQoNO2aB8eNan2IyfYJRKw7hsQ0UoTleicXic5a2ddgg/132"
+    r = requests.get(url).content
+    print(r)
