@@ -6,12 +6,17 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_moment import Moment
 from config import config
 from flask_restful import Api
+from flask_login import LoginManager
 
 
 bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
+loginmanager = LoginManager()
+loginmanager.session_protection='strong'
+loginmanager.login_view='main.user'
+loginmanager.login_message = "请先登录或者注册"
 api = Api()
 
 
@@ -25,6 +30,7 @@ def create_app(config_name):
     db.init_app(app)
     moment.init_app(app)
     api.init_app(app)
+    loginmanager.init_app(app)
 
     # 注册main的蓝图
     from .main import main as main_blueprint

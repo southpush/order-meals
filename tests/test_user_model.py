@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from app.db.user_db import add_user_personal
 from app.models.user import user_shop, user_personal
 from app import db
 
@@ -31,11 +30,12 @@ class UserModelTestCase(unittest.TestCase):
         user2 = user_personal(password='cat')
         self.assertTrue(user1.password_hash != user2.password_hash)
 
-    # 测试token验证
-    def test_token_verify(self):
-        user = user_personal(openid="test_Token", phone="9372649573", nickname="testTokenName", password="cat")
-        db.session.add(user)
-        db.session.commit()
-        token = user.generate_auth_token()
-        user_verify = user_personal.verify_auth_token(token)
-        self.assertTrue(user == user_verify)
+    # # 测试token验证
+    # def test_token_verify(self):
+    #     user = user_personal(openid="test_Token", phone="9372649573", nickname="testTokenName",
+    #                         head_img=0, password="cat")
+    #     db.session.add(user)
+    #     db.session.commit()
+    #     token = user.generate_auth_token()
+    #     user_verify = user_personal.verify_auth_token(token)
+    #     self.assertTrue(user == user_verify)

@@ -70,9 +70,6 @@ def run_migrations_online():
                                 poolclass=pool.NullPool)
 
     connection = engine.connect()
-    # 后面加了两个配置
-    # compare_type 检查字段类型
-    # compare_server_default 比较默认值
     context.configure(connection=connection,
                       target_metadata=target_metadata,
                       process_revision_directives=process_revision_directives,
@@ -85,7 +82,6 @@ def run_migrations_online():
             context.run_migrations()
     finally:
         connection.close()
-
 
 if context.is_offline_mode():
     run_migrations_offline()

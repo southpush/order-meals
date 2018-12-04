@@ -28,7 +28,7 @@ class userLogin(Resource):
         user = get_user_personal(openid)
         token = user.generate_auth_token()
         if user:
-            return jsonify({"token": token.decode("ascii"), "id": user.id})
+            return jsonify({"token": token.decode("ascii")})
         else:
             return {"errMsg": "Can't find this user"}, 404
 

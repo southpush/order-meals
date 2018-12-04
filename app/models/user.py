@@ -7,12 +7,22 @@ from app.glovar import secret_key
 
 class user_personal(db.Model):
     __tablename__ = "user_personal"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     openid = db.Column(db.String(30), unique=True, nullable=False)
     phone = db.Column(db.String(11), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     head_img = db.Column(db.LargeBinary(length=2048), nullable=True)
     nickname = db.Column(db.String(64), nullable=True)
+
+    # 反向引用
+    address = db.relationship("user_address", backref=db.backref("user"), uselist=True,
+                              lazy="dynamic")
+    shopping_car = db.relationship("shopping_car", backref=db.backref("user"), uselist=True,
+                                   lazy="dynamic")
+    comment = db.relationship("comment", backref=db.backref("user"), uselist=True,
+                              lazy="dynamic")
+    order = db.relationship("orders", backref=db.backref("user"), uselist=True,
+                            lazy="dynamic")
 
     # 将password设置成不可读属性
     @property
@@ -61,6 +71,10 @@ class user_shop(db.Model):
     openid = db.Column(db.String(30), unique=True, nullable=False)
     phone = db.Column(db.String(11), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+
+    # shop_info 的映射
+    shop = db.relationship("shop_info", backref=db.backref("shop_owner"), uselist=False,
+                           lazy="select")
 
     # 将password设置成不可读属性
     @property
