@@ -15,7 +15,7 @@ def make_shell_contest():
     return dict(app=app, db=db, user_personal=user.user_personal, user_shop=user.user_shop, shop=shop.shop_info)
 
 
-manage.add_command("runserver", Server(host="127.0.0.1", port=5000, use_reloader=True, use_debugger=True))
+manage.add_command("runserver", Server(host="0.0.0.0", port=5000, use_reloader=False, use_debugger=True))
 manage.add_command("shell", Shell(make_context=make_shell_contest))
 
 # 用于数据库迁移的

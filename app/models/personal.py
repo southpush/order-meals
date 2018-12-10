@@ -14,7 +14,7 @@ class user_address(db.Model):
     geocoding = db.Column(db.String(40), nullable=True)
 
     # 外鍵
-    user_id = db.Column(db.Integer, db.ForeignKey("user_personal.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user_personal.id", ondelete="CASCADE"), nullable=False)
 
     def __repr__(self):
         return "<%r's address, id=%r>" % (self.user.nickname, self.id)
@@ -26,9 +26,9 @@ class comment(db.Model):
     content = db.Column(db.Text, nullable=True)
 
     # 外鍵
-    order_id = db.Column(db.Integer, db.ForeignKey("orders.id"), nullable=False)
-    item_id = db.Column(db.Integer, db.ForeignKey("shop_items.id"), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("user_personal.id"), nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey("orders.id", ondelete="CASCADE"), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey("shop_items.id", ondelete="CASCADE"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user_personal.id", ondelete="CASCADE"), nullable=False)
 
     def __repr__(self):
         return "<comment id = %r>" % self.id
@@ -40,8 +40,8 @@ class shopping_car(db.Model):
     item_num = db.Column(db.Integer, nullable=False)
 
     # 外鍵
-    user_id = db.Column(db.Integer, db.ForeignKey("user_personal.id"), nullable=False)
-    item_id = db.Column(db.Integer, db.ForeignKey("shop_items.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user_personal.id", ondelete="CASCADE"), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey("shop_items.id", ondelete="CASCADE"), nullable=False)
 
     def __repr__(self):
         return "<shopping car for %r , shopping car id '%r'>" % (self.user.nicknamem, self.id)

@@ -26,7 +26,7 @@ class Admin(UserMixin, db.Model):
     c_time = db.Column(db.DateTime, default=datetime.datetime.now)
 
     # 外键
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
+    role_id = db.Column(db.Integer, db.ForeignKey('role.id', ondelete="CASCADE"))
 
     def __init__(self, **kwargs):
         super(Admin, self).__init__(**kwargs)

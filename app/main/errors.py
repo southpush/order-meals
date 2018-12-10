@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template
+
+from app.api_1_0.response import general_response
 from . import main
 
 
@@ -11,4 +13,10 @@ def page_not_found(e):
 @main.app_errorhandler(500)
 def internal_server_error(e):
     return render_template("errors/500.html"), 500
+
+
+@main.app_errorhandler(405)
+def method_not_allowed(e):
+    return general_response(info={"err": "hello"}, status_code=405)
+
 

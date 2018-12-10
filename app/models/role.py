@@ -15,7 +15,8 @@ class Role(db.Model):
     permission = db.Column(db.Integer)
 
     # 反向引用
-    admin = db.relationship('admin', backref='role')
+    admin = db.relationship('Admin', backref=db.backref('role'), lazy="select",
+                            cascade="all, delete-orphan", passive_deletes=True)
 
     def __init__(self, **kwargs):
         super(Role, self).__init__(**kwargs)

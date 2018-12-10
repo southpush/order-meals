@@ -73,9 +73,7 @@ def run_migrations_online():
     context.configure(connection=connection,
                       target_metadata=target_metadata,
                       process_revision_directives=process_revision_directives,
-                      **current_app.extensions['migrate'].configure_args,
-                      compare_type=True,
-                      compare_server_default=True)
+                      **current_app.extensions['migrate'].configure_args)
 
     try:
         with context.begin_transaction():

@@ -2,9 +2,6 @@
 import pytest
 from webtest import TestApp
 
-import pytest
-from webtest import TestApp
-
 from app import create_app
 from app import db as _db
 
@@ -41,7 +38,7 @@ def db(app):
 
     # Explicitly close DB connection
     _db.session.close()
-    _db.drop_all()
+    # _db.drop_all()
 
 
 @pytest.fixture(scope="module")

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from .. import db
-from ..models.user import user_personal, user_shop
+from ..models.user import user_personal, user_shop, head_img
 from sqlalchemy.exc import SQLAlchemyError, InvalidRequestError
 
 
@@ -31,10 +31,29 @@ def get_user_shop(openid=None, phone=None):
             return user if user else False
 
 
-# 添加新用户
-def add_user_personal(user):
+# 获取图片的
+def get_img(img_id=None):
+    if img_id:
+        img = head_img.query.filter_by(id=img_id).first()
+        return img.img if img else False
+    return False
+
+
+# 增加数据的通用方法
+def add_in_db(what):
     try:
-        db.session.add(user)
+        db.session.add(what)
+        db.session.commit()
+        return what
+    except Exception as e:
+        db.session.rollback()
+        print(repr(e))
+        return False
+
+
+# 更新数据通用方法
+def update_in_db(what):
+    try:
         db.session.commit()
         return True
     except Exception as e:
@@ -43,3 +62,13 @@ def add_user_personal(user):
         return False
 
 
+# 删除数据通用方法
+def delete_in_db(what):
+    try:
+        db.session.delete(what)
+        db.session.commit()
+        return True
+    except Exception as e:
+        db.session.rollback()
+        print(repr(e))
+        return False

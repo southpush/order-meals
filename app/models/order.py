@@ -15,11 +15,12 @@ class orders(db.Model):
     total_items = db.Column(db.Integer, nullable=False)
 
     # 外键
-    user_id = db.Column(db.Integer, db.ForeignKey("user_shop.id"), nullable=False)
-    shop_id = db.Column(db.Integer, db.ForeignKey("shop_info.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user_personal.id", ondelete="CASCADE"), nullable=False)
+    shop_id = db.Column(db.Integer, db.ForeignKey("shop_info.id", ondelete="CASCADE"), nullable=False)
 
     # 反向引用
-    items = db.relationship("order_items", backref=db.backref("order"), lazy="dynamic")
+    items = db.relationship("order_items", backref=db.backref("order"), lazy="dynamic"
+                            , cascade="all, delete-orphan", passive_deletes=True)
 
     def __repr__(self):
         return "<comment id = %r>" % self.id
@@ -32,8 +33,8 @@ class order_items(db.Model):
     item_price = db.Column(db.Integer, nullable=True)
 
     # 外键
-    order_id = db.Column(db.Integer, db.ForeignKey("orders.id"), nullable=False)
-    item_id = db.Column(db.Integer, db.ForeignKey("shop_items.id"), nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey("orders.id", ondelete="CASCADE"), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey("shop_items.id", ondelete="CASCADE"), nullable=False)
 
     def __repr__(self):
         return "<order items id = '%r'>" % self.id

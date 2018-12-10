@@ -14,8 +14,8 @@ mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
 loginmanager = LoginManager()
-loginmanager.session_protection='strong'
-loginmanager.login_view='main.user'
+loginmanager.session_protection = 'strong'
+loginmanager.login_view = 'main.user'
 loginmanager.login_message = "请先登录或者注册"
 api = Api()
 
@@ -47,6 +47,10 @@ def create_app(config_name):
     # 注册 shop 的蓝图
     from .api_1_0.shop import api_1_0_shop as api_1_0_shop_blueprint
     app.register_blueprint(api_1_0_shop_blueprint)
+
+    # 注册 图片 的蓝图
+    from .api_1_0.general import api_1_0_general as api_1_0_general_blueprint
+    app.register_blueprint(api_1_0_general_blueprint)
 
     # 附加路由和自定义的错误页面
 

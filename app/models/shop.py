@@ -15,22 +15,42 @@ class shop_info(db.Model):
     address = db.Column(db.String(100), nullable=False)
     floor_send_cost = db.Column(db.Float, nullable=True, default=0)
     send_cost = db.Column(db.Float, nullable=True, default=0)
-    notic = db.Column(db.String(200), nullable=True)
+    notic = db.Column(db.String(200), nullable=True, default="")
     score = db.Column(db.Float, nullable=True, default=0)
     shop_img = db.Column(db.LargeBinary, nullable=True)
     box_price = db.Column(db.Float, nullable=True, default=0)
     state = db.Column(db.Integer, nullable=False, default=10)
 
     # 外键
-    owner_id = db.Column(db.Integer, db.ForeignKey("user_shop.id"), unique=True)
-    license_id = db.Column(db.Integer, db.ForeignKey("shop_license.id"), unique=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey("user_shop.id", ondelete="CASCADE"), unique=True,
+                         nullable=False)
 
     # 反向引用
     items = db.relationship("shop_items", backref=db.backref("shop"), uselist=True,
-                            lazy="dynamic")
+                            lazy="dynamic", cascade="all, delete-orphan", passive_deletes=True)
+    license = db.relationship("shop_license", backref=db.backref("shop"), uselist=False,
+                              lazy="select", cascade="all, delete-orphan", passive_deletes=True)
 
     def __repr__(self):
-        return "<shop %r, shop_owner %r>" % (self.shop_name, self.shop_owner.name)
+        return "<shop %r>" % self.shop_name
+
+    def get_shop_info(self):
+        shop_dict = {
+            "shop_name": self.shop_name,
+            "shop_introduction": self.shop_introduction,
+            "contact_name": self.contact_name,
+            "contact_phone": self.contact_phone,
+            "geocoding": self.geocoding,
+            "address": self.address,
+            "floor_send_cost": self.floor_send_cost,
+            "send_cost": self.send_cost,
+            "notic": self.notic,
+            "score": self.score,
+            "shop_img": self.shop_img,
+            "box_price": self.box_price,
+            "state": self.state,
+        }
+        return shop_dict
 
 
 class shop_license(db.Model):
@@ -54,9 +74,8 @@ class shop_license(db.Model):
     status = db.Column(db.Integer, nullable=True)
     add_time = db.Column(db.DateTime, default=datetime.now)
 
-    # 反向引用
-    shop = db.relationship("shop_info", backref=db.backref('shop_license'), uselist=False,
-                           lazy="select")
+    # 外键
+    shop_id = db.Column(db.Integer, db.ForeignKey("shop_info.id", ondelete="CASCADE"), unique=True, nullable=False)
 
     def __repr__(self):
         return "<shop_license %r>" % self.id
@@ -73,5 +92,5 @@ class shop_items(db.Model):
     state = db.Column(db.Integer, nullable=False, default=10)
 
     # 外键
-    shop_id = db.Column(db.Integer, db.ForeignKey("shop_info.id"), nullable=False)
+    shop_id = db.Column(db.Integer, db.ForeignKey("shop_info.id", ondelete="CASCADE"), nullable=False)
 
