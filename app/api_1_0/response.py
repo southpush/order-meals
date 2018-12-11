@@ -36,6 +36,18 @@ error_dict = {
         "message": "Add user error.",
         "code": 104
     },
+    105: {
+        "message": "Fail in uploading image into database.",
+        "code": 105
+    },
+    106: {
+        "message": "Can't find this picture.",
+        'code': 106
+    },
+    107: {
+        "message": "The file is too large to add in database, size limit in 1m.",
+        "code": 107
+    },
     201: {
         "message": "Invalid code.",
         "code": 201
@@ -69,7 +81,11 @@ error_dict = {
         "code": 503
     },
     504: {
-        "message": "Fail in updating the shop info",
+        "message": "Fail in updating the shop info.",
         "code": 504
+    },
+    601: {
+        "message": "Fail in updating in database.",
+        "code": 601
     }
 }

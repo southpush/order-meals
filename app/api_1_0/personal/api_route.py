@@ -12,3 +12,4 @@ api_personal.add_resource(user_info, "/user-info")
 api_personal.add_resource(getTest, "/getTest")
 api_personal.add_resource(getTest2, "/getTest2")
 
+

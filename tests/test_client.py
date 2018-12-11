@@ -29,9 +29,9 @@ class FlaskClientTestCase(unittest.TestCase):
     def test_add_user(self):
         with self.assertRaises(sqlalchemy.exc.IntegrityError):
             user1 = user_personal(openid="openid1", phone="phone1", password="cat",
-                                  head_img=0, nickname="ppppu1")
+                                  nickname="ppppu1")
             user2 = user_personal(openid="openid1", phone="phone2", password="cat",
-                                  head_img=0, nickname="ppppu")
+                                  nickname="ppppu")
             db.session.add(user1)
             db.session.add(user2)
             db.session.commit()
@@ -42,9 +42,9 @@ class FlaskClientTestCase(unittest.TestCase):
     # 测试用户和用户地址的关联
     def test_user_personal_and_user_address(self):
         user1 = user_personal(openid="openid1", phone="phone1", password="cat",
-                              head_img=0, nickname="ppppu1")
+                              nickname="ppppu1")
         user2 = user_personal(openid="openid2", phone="phone2", password="cat",
-                              head_img=0, nickname="ppppu")
+                              nickname="ppppu")
 
         db.session.add(user1)
         db.session.add(user2)
@@ -65,7 +65,7 @@ class FlaskClientTestCase(unittest.TestCase):
 
     # 测试一个商铺用户只能有一家店
     def test_user_shop_only_one_shop(self):
-        user = user_shop(name="pu_shop_user", openid="adfe", phone="sadf3ee", password="asdfe")
+        user = user_shop(nickname="pu_shop_user", openid="adfe", phone="sadf3ee", password="asdfe")
         try:
             db.session.add(user)
             db.session.commit()

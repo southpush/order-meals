@@ -79,8 +79,10 @@ class shop_info_application(Resource):
         shop.geocoding = geocoding
         shop.address = address
         shop.shop_introduction = shop_introduction
-        update_in_db(shop)
-        return make_response()
+        if update_in_db(shop):
+            return make_response()
+        else:
+            return general_response(err_code=504, status_code=406)
 
 
 class working_shop_info(Resource):

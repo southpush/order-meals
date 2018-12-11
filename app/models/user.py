@@ -138,5 +138,10 @@ class user_shop(db.Model):
 class head_img(db.Model):
     __tablename__ = "head_img"
     id = db.Column(db.Integer, primary_key=True)
-    img = db.Column(db.LargeBinary(length=2048), nullable=False)
+    img = db.Column(db.LargeBinary(length=65536), nullable=False)
+
+    user_personal = db.relationship("user_personal", backref=db.backref("head_img"), uselist=False,
+                                    lazy="select", cascade="all, delete-orphan", passive_deletes=True)
+    user_shop = db.relationship("user_shop", backref=db.backref("head_img"), uselist=False,
+                                lazy="select", cascade="all, delete-orphan", passive_deletes=True)
 

@@ -7,5 +7,5 @@ from app.api_1_0.general.api_general import img
 api_general = Api(api_1_0_general, catch_all_404s=True, errors=errors)
 
 # 注册路由
-api_general.add_resource(img, "/img")
+api_general.add_resource(img, "/head-img", "/head-img/<image_id>")
 

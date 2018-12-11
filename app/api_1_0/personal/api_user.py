@@ -2,7 +2,8 @@
 import requests
 from flask_restful import Resource
 from flask_restful import reqparse
-from flask import make_response
+from flask import make_response, json, request
+from app.db.user_db import get_img, update_in_db, delete_in_db
 
 # from app.api_1_0.errors import APIException
 from app.db.user_db import get_user_personal, add_in_db
@@ -82,10 +83,41 @@ class user_info(Resource):
     def get(self, user):
         return general_response(info=user.get_user_info(), status_code=200)
 
+    # 修改用户信息
+    @login_required_personal()
+    def put(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("nickname", type=str)
+        data.add_argument("image_id", type=str)
+        nickname = data.parse_args()["nickname"]
+        image_id = data.parse_args()["image_id"]
+        pre_img = user.head_img
+        if get_img(img_id=image_id):
+            user.nickname = nickname
+            user.head_img_id = image_id
+            if not update_in_db(user):
+                return general_response(err_code=601, status_code=400)
+            if pre_img.id != image_id:
+                delete_in_db(pre_img)
+            return make_response("", 204)
+
 
 class getTest(Resource):
     def get(self):
-        return general_response(err_code=101, status_code=201)
+        data = reqparse.RequestParser()
+        data.add_argument("testlist", type=str)
+        testlist = data.parse_args()["testlist"]
+        print(testlist)
+        tl = json.loads(testlist)
+        print(tl)
+
+        for i in tl:
+            k = tuple(i)
+            print(k)
+        td = {
+            "testdict": tl
+        }
+        return general_response(info=td)
 
 
 class getTest2(Resource):
@@ -93,6 +125,17 @@ class getTest2(Resource):
     def get(self, user):
         print(user)
         return True
+
+    def post(self):
+        data = reqparse.RequestParser()
+        data.add_argument("file", type=str)
+        file = request.files.get("file")
+        if file:
+            file.seek(0)
+            img = head_img(img=file.stream.read())
+            if add_in_db(img):
+                return make_response()
+            return
 
 
 class loginTest1(Resource):

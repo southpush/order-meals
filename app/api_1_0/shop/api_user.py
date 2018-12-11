@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 # -*- coding: utf-8 -*-
 import requests
+from flask import make_response
 from flask_restful import Resource, reqparse
 
 from app.api_1_0.response import general_response
-from app.db.user_db import get_user_shop, add_in_db
+from app.db.user_db import get_user_shop, add_in_db, get_img, update_in_db
 
 from app.main.auth import get_openid, login_required_shop
 
@@ -76,6 +77,25 @@ class user_info(Resource):
     @login_required_shop()
     def get(self, user):
         return general_response(info=user.get_user_info(), status_code=200)
+
+    @login_required_shop()
+    def put(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("nickname", type=str)
+        data.add_argument("image_id", type=int)
+        nickname = data.parse_args()["nickname"]
+        image_id = data.parse_args()["image_id"]
+        print(nickname)
+        print(image_id)
+        if get_img(img_id=image_id):
+            user.nickname = nickname
+            user.head_img_id = image_id
+            if update_in_db(user):
+                return make_response("", 204)
+            else:
+                return general_response(err_code=601, status_code=400)
+        else:
+            return general_response(err_code=401, status_code=404)
 
 
 class getTest(Resource):
