@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
 # -*- coding: utf-8 -*-
+from io import BytesIO
+
 import requests
 from flask import make_response
 from flask_restful import Resource, reqparse
+from werkzeug.datastructures import FileStorage
 
 from app.api_1_0.response import general_response
-from app.db.user_db import get_user_shop, add_in_db, get_img, update_in_db
+from app.db.user_db import get_user_shop, add_in_db, update_in_db
 
 from app.main.auth import get_openid, login_required_shop
 
 # 用户进入小程序先登录，小程序传入code
-from app.models.user import user_shop, head_img
+from app.models.user import user_shop
 
 
 class user(Resource):
@@ -49,23 +52,25 @@ class user(Resource):
         img_url = data.parse_args()["img_url"]
         if img_url:
             img = requests.get(img_url).content
-            img_obj = add_in_db(head_img(img=img))
-            img_id = img_obj.id
 
         openid = get_openid(code)
         if not openid:
             return general_response(err_code=201, status_code=400)
 
-        if not (code and phone and password and nickname and img_id):
+        if not (code and phone and password and nickname and img):
             return general_response(err_code=101, status_code=400)
         elif get_user_shop(openid=openid):
             return general_response(err_code=102, status_code=403)
         elif get_user_shop(phone=phone):
             return general_response(err_code=103, status_code=403)
         else:
-            user = user_shop(openid=openid, phone=phone, password=password, head_img_id=img_id,
-                                 nickname=nickname)
+            user = user_shop(openid=openid, phone=phone, password=password, nickname=nickname)
             if add_in_db(user):
+                storage = FileStorage(stream=BytesIO(img), content_type="image/jpeg")
+                filename = str(user.id) + user.nickname + ".jpg"
+                storage.save("app/static/user_shop_head/" + filename)
+                user.head_image_name = filename
+                update_in_db(user)
                 token = user.generate_auth_token()
                 return general_response(token=token)
             else:
@@ -119,3 +124,44 @@ class loginTest1(Resource):
         pass
 
 
+class testRL(Resource):
+    def get(self):
+        data = reqparse.RequestParser()
+        data.add_argument('openid', type=str)
+        openid = data.parse_args()["openid"]
+
+        if not openid:
+            return general_response(err_code=201, status_code=400)
+
+        user = user_shop.query.filter_by(openid=openid).first()
+        if user:
+            token = user.generate_auth_token()
+            return general_response(token=token)
+        else:
+            return general_response(err_code=202, status_code=404)
+
+    # 用户注册
+    def post(self):
+        data = reqparse.RequestParser()
+        data.add_argument("openid", type=str)
+        data.add_argument("phone", type=str)
+        data.add_argument("password", type=str)
+        data.add_argument("nickname", type=str)
+        openid = data.parse_args()["openid"]
+        phone = data.parse_args()["phone"]
+        password = data.parse_args()["password"]
+        nickname = data.parse_args()["nickname"]
+
+        if not openid:
+            return general_response(err_code=201, status_code=400)
+        elif get_user_shop(openid=openid):
+            return general_response(err_code=102, status_code=403)
+        elif get_user_shop(phone=phone):
+            return general_response(err_code=103, status_code=403)
+        else:
+            user = user_shop(openid=openid, phone=phone, password=password, nickname=nickname)
+            if add_in_db(user):
+                token = user.generate_auth_token()
+                return general_response(token=token)
+            else:
+                return general_response(err_code=104, status_code=406)

@@ -12,19 +12,15 @@ class user_personal(db.Model):
     phone = db.Column(db.String(11), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     nickname = db.Column(db.String(64), nullable=True)
+    head_image_name = db.Column(db.String(64), nullable=True)
 
     # 反向引用
-    address = db.relationship("user_address", backref=db.backref("user"), uselist=True,
+    address = db.relationship("address", backref=db.backref("user"), uselist=True,
                               lazy="dynamic", cascade="all, delete-orphan", passive_deletes=True)
-    shopping_car = db.relationship("shopping_car", backref=db.backref("user"), uselist=True,
-                                   lazy="dynamic", cascade="all, delete-orphan", passive_deletes=True)
     comment = db.relationship("comment", backref=db.backref("user"), uselist=True,
                               lazy="dynamic", cascade="all, delete-orphan", passive_deletes=True)
     order = db.relationship("orders", backref=db.backref("user"), uselist=True,
                             lazy="dynamic", cascade="all, delete-orphan", passive_deletes=True)
-
-    # 头像的外键
-    head_img_id = db.Column(db.Integer, db.ForeignKey("head_img.id"))
 
     # 将password设置成不可读属性
     @property
@@ -65,7 +61,7 @@ class user_personal(db.Model):
         info = {
             "phone": self.phone,
             "nickname": self.nickname,
-            "head_img_id": self.head_img_id
+            "head image name": self.head_image_name
         }
         return info
 
@@ -80,20 +76,18 @@ class user_shop(db.Model):
     openid = db.Column(db.String(30), unique=True, nullable=False)
     phone = db.Column(db.String(11), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    head_image_name = db.Column(db.String(64), nullable=False, default="default.jpg")
 
     # shop_info 的映射
     shop = db.relationship("shop_info", backref=db.backref("shop_owner"), uselist=False,
                            lazy="select", cascade="all, delete-orphan", passive_deletes=True)
-
-    # 头像的外键
-    head_img_id = db.Column(db.Integer, db.ForeignKey("head_img.id"))
 
     # 获取用户信息字典（返回给用户看的）
     def get_user_info(self):
         info = {
             "phone": self.phone,
             "nickname": self.nickname,
-            "head_img_id": self.head_img_id
+            "head image name": self.head_image_name
         }
         return info
 
@@ -133,15 +127,3 @@ class user_shop(db.Model):
 
     def __repr__(self):
         return "<User_shop %r>" % self.nickname
-
-
-class head_img(db.Model):
-    __tablename__ = "head_img"
-    id = db.Column(db.Integer, primary_key=True)
-    img = db.Column(db.LargeBinary(length=65536), nullable=False)
-
-    user_personal = db.relationship("user_personal", backref=db.backref("head_img"), uselist=False,
-                                    lazy="select", cascade="all, delete-orphan", passive_deletes=True)
-    user_shop = db.relationship("user_shop", backref=db.backref("head_img"), uselist=False,
-                                lazy="select", cascade="all, delete-orphan", passive_deletes=True)
-

@@ -2,7 +2,6 @@
 from flask import jsonify, Response
 
 from app.api_1_0.response import general_response
-from app.db.user_db import get_img
 from . import main
 
 
@@ -19,5 +18,6 @@ def get_img_route(image_id):
         resp = Response(img2, mimetype="image/jpeg")
         return resp
     return general_response(err_code=401, status_code=404)
+
 
 

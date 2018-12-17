@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from .. import db
-from ..models.user import user_personal, user_shop, head_img
-from sqlalchemy.exc import SQLAlchemyError, InvalidRequestError
+from ..models.user import user_personal, user_shop
 
 
 # 查询用户,根据传入参数来判断是用openid来登陆还是手机号登陆
@@ -29,14 +28,6 @@ def get_user_shop(openid=None, phone=None):
         else:
             user = user_shop.query.filter_by(phone=phone).first()
             return user if user else False
-
-
-# 获取图片的
-def get_img(img_id=None):
-    if img_id:
-        img = head_img.query.filter_by(id=img_id).first()
-        return img.img if img else False
-    return False
 
 
 # 增加数据的通用方法

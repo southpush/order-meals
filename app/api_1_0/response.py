@@ -45,8 +45,12 @@ error_dict = {
         'code': 106
     },
     107: {
-        "message": "The file is too large to add in database, size limit in 1m.",
+        "message": "The file is too large, size limit in 1m.",
         "code": 107
+    },
+    108: {
+        "message": "The file format is incorrect.",
+        "code": 108
     },
     201: {
         "message": "Invalid code.",

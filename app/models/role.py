@@ -11,7 +11,7 @@ class Role(db.Model):
     __tablename__ = "role"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, unique=True)
-    default = db.Column(db.Boolean,default= False, index=True)
+    default = db.Column(db.Boolean, default=False, index=True)
     permission = db.Column(db.Integer)
 
     # 反向引用
