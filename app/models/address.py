@@ -28,6 +28,9 @@ class address(db.Model):
     lat = db.Column(db.Float, nullable=False)
     lng = db.Column(db.Float, nullable=False)
 
+    # 这一条收货地址的权重，返回地址排序用
+    weights = db.Column(db.Integer, nullable=False, default=1)
+
     user_id = db.Column(db.Integer, db.ForeignKey("user_personal.id"))
 
     def get_address_dict(self):

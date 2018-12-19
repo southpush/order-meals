@@ -10,6 +10,7 @@ from app.main.auth import login_required_personal
 
 
 # 获取地理位置附近的商铺
+from app.models import address
 from app.models.order import orders, order_items
 from app.models.shop import shop_items
 
@@ -20,7 +21,7 @@ class nearby_shop(Resource):
         info = []
         for i in a:
             info.append(i.get_simple_shop_info())
-        return general_response(info=info)
+        return general_response(info={"shop_list": info})
 
 
 class personal_orders(Resource):
@@ -30,8 +31,13 @@ class personal_orders(Resource):
         data = reqparse.RequestParser()
         data.add_argument("order_id", type=int)
         id = data.parse_args()["order_id"]
+
+        if not id:
+            return general_response(err_code=101, status_code=400)
+
         order = user.order.filter_by(id=id).first()
-        info = order.get_order_dict()
+        if not order:
+            info = order.get_order_dict()
         return general_response(info=info)
 
     # 下单
@@ -40,9 +46,17 @@ class personal_orders(Resource):
         data = reqparse.RequestParser()
         data.add_argument("item_list", type=str)
         data.add_argument("shop_id", type=str)
+        data.add_argument("address_id", type=int)
         item_list = json.loads(data.parse_args()["item_list"])
+        address_id = data.parse_args()["address_id"]
         shop_id = data.parse_args()["shop_id"]
-        order = orders(total_items=len(item_list), user_id=user.id, shop_id=shop_id)
+
+        contact = user.address.filter_by(id=address_id).first()
+        if not contact:
+            return general_response(err_code=701, status_code=400)
+        order = orders(total_items=len(item_list), user_id=user.id, shop_id=shop_id,
+                       address_str=contact.get_address_str(), contact_phone=contact.contact_phone,
+                       receiver=contact.receiver)
         add_in_db(order)
         for a in item_list:
             item = shop_items.query.filter_by(shop_id=shop_id).filter_by(id=int(a["item_id"])).first()

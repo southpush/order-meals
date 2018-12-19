@@ -72,6 +72,30 @@ error_dict = {
         "message": "Can't find this picture.",
         "code": 401
     },
+    402: {
+        "message": "Incorrect relationship or incorrect region id.",
+        "code": 402
+    },
+    403: {
+        "message": "This user has not address.",
+        "code": 403
+    },
+    404: {
+        "message": 'No such address.',
+        "code": 404
+    },
+    405: {
+        "message": "No such item specification.",
+        "code": 405
+    },
+    406: {
+        "message": "This shop has no such shop item.",
+        "code": 406
+    },
+    407: {
+        "message": "No such shop.",
+        "code": 407
+    },
     501: {
         "message": "This shop user has owned a shop.",
         "code": 501
@@ -91,5 +115,17 @@ error_dict = {
     601: {
         "message": "Fail in updating in database.",
         "code": 601
+    },
+    602: {
+        "message": "Fail in adding in database.",
+        "code": 602
+    },
+    603: {
+        "message": "Fail in delete in database.",
+        "code": 603
+    },
+    701: {
+        "message": "Incorrect receiver information.",
+        "code": 701
     }
 }

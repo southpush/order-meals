@@ -50,6 +50,8 @@ class user(Resource):
         data.add_argument("password", type=str)
         data.add_argument("nickname", type=str)
         data.add_argument("img_url", type=str)
+        # data.add_argument("AppID", type=str)
+        # data.add_argument("AppSecret", type=str)
         code = data.parse_args()["code"]
         phone = data.parse_args()["phone"]
         password = data.parse_args()["password"]
@@ -73,7 +75,7 @@ class user(Resource):
             user = user_personal(openid=openid, phone=phone, password=password, nickname=nickname)
             if add_in_db(user):
                 storage = FileStorage(stream=BytesIO(img), content_type="image/jpeg")
-                filename = str(user.id) + user.nickname + ".jpg"
+                filename = str(user.id) + "default.jpg"
                 storage.save("app/static/user_personal_head/" + filename)
                 user.head_image_name = filename
                 update_in_db(user)

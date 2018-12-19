@@ -6,7 +6,7 @@ from flask import make_response
 
 from app import glovar
 from app.api_1_0.response import general_response
-from app.db.user_db import add_in_db, update_in_db
+from app.db.user_db import add_in_db, update_in_db, delete_in_db
 from app.main.auth import login_required_shop
 from flask_restful import Resource, reqparse
 from app.models.shop import shop_info, item_specification, item_category, shop_items
@@ -132,6 +132,8 @@ class food_items(Resource):
         data.add_argument("shop_id", type=int)
         id = data.parse_args()["shop_id"]
         shop = shop_info.query.filter_by(id=id).first()
+        if not shop:
+            return general_response(err_code=407, status_code=404)
         category_list = shop.item_category.all()
         info = []
         for a in category_list:
@@ -167,7 +169,80 @@ class food_items(Resource):
         return make_response()
 
 
+# 食品规格的
+class food_specification(Resource):
+    # 获取该食品的规格
+    def get(self):
+        data = reqparse.RequestParser()
+        data.add_argument("item_id", type=str)
+        item_id = data.parse_args()["item_id"]
 
+        item = shop_items.query.filter_by(id=item_id).first()
+        specification_list = item.specification.all()
+        info = []
+        for i in specification_list:
+            info.append(i.get_specification_dict())
 
+        return general_response(info={"specification_list": info})
 
+    # 商家上传规格数据
+    @login_required_shop()
+    def post(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("specification_name", type=str)
+        data.add_argument("additional_costs", type=float)
+        data.add_argument("item_id", type=int)
+        specification_name = data.parse_args()["specification_name"]
+        additional_costs = data.parse_args()["additional_costs"]
+        item_id = data.parse_args()["item_id"]
+
+        if not user.shop.items.filter_by(id=item_id).all():
+            return general_response(err_code=406, status_code=404)
+
+        a = item_specification(specification_name=specification_name, additional_costs=additional_costs,
+                               item_id=item_id)
+
+        if add_in_db(a):
+            return make_response("", 204)
+        return general_response(err_code=602, status_code=400)
+
+    # 商家修改规格参数
+    @login_required_shop()
+    def put(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("specification_name", type=str)
+        data.add_argument("additional_costs", type=float)
+        data.add_argument("specification_id", type=int)
+        specification_name = data.parse_args()["specification_name"]
+        additional_costs = data.parse_args()["additional_costs"]
+        specification_id = data.parse_args()["specification_id"]
+
+        a = item_specification.query.filter_by(id=specification_id).first()
+
+        if a:
+            if a.item in user.shop.items.all():
+                a.specification_name = specification_name
+                a.additional_costs = additional_costs
+                if update_in_db(a):
+                    return make_response("", 204)
+                return general_response(err_code=601, status_code=400)
+        return general_response(err_code=405, status_code=404)
+
+    # 商家删除规格
+    @login_required_shop()
+    def delete(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("specification_id", type=int)
+        specification_id = data.parse_args()["specification_id"]
+
+        a = item_specification.query.filter_by(id=specification_id).first()
+
+        if a:
+            if a.item in user.shop.items.all():
+                if delete_in_db(a):
+                    return make_response("", 204)
+                else:
+                    return general_response(err_code=603, status_code=400)
+        else:
+            return general_response(err_code=405, status_code=404)
 

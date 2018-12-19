@@ -144,17 +144,18 @@ class shop_items(db.Model):
                                     lazy="dynamic", cascade="all, delete-orphan", passive_deletes=True)
 
     def get_item_detail(self):
-        specification_dict = {}
+        specification_list = []
         for i in self.specification.all():
-            specification_dict[i.id] = i.specification_name
+            specification_list.append(i.get_specification_dict())
 
         item_dict = {
-            "shop item id": self.id,
-            "item sales": self.item_sales,
-            "item stock": self.item_stock,
-            "item price": self.item_price,
-            "item introduction": self.item_introduction,
-            "item specification": specification_dict
+            "item_name": self.item_name,
+            "shop_item_id": self.id,
+            "item_sales": self.item_sales,
+            "item_stock": self.item_stock,
+            "item_price": self.item_price,
+            "item_introduction": self.item_introduction,
+            "item_specification": specification_list
         }
         return item_dict
 
@@ -186,6 +187,14 @@ class item_specification(db.Model):
 
     # 外键
     item_id = db.Column(db.Integer, db.ForeignKey("shop_items.id", ondelete="CASCADE"), nullable=False)
+
+    def get_specification_dict(self):
+        info = {
+            "specification_id": self.id,
+            "specification_name": self.specification_name,
+            "additional_costs": self.additional_costs
+        }
+        return info
 
     def __repr__(self):
         return "<item_specification %r, belong item_id %r>" % (self.specification_name, self.item.id)

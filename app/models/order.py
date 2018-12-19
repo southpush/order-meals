@@ -14,22 +14,26 @@ class orders(db.Model):
     state = db.Column(db.Integer, default=10)
     total_items = db.Column(db.Integer, nullable=False, default=0)
 
+    # 收货信息
+    address_str = db.Column(db.String(200), nullable=False)
+    receiver = db.Column(db.String(20), nullable=False)
+    contact_phone = db.Column(db.String(11), nullable=False)
+
     # 外键
     user_id = db.Column(db.Integer, db.ForeignKey("user_personal.id", ondelete="CASCADE"), nullable=False)
     shop_id = db.Column(db.Integer, db.ForeignKey("shop_info.id", ondelete="CASCADE"), nullable=False)
 
     # 反向引用
-    items = db.relationship("order_items", backref=db.backref("order"), lazy="dynamic"
-                            , cascade="all, delete-orphan", passive_deletes=True)
+    items = db.relationship("order_items", backref=db.backref("order"), lazy="dynamic",
+                            cascade="all, delete-orphan", passive_deletes=True)
 
-    def get_order_dict(self):
+    def get_order_dict_personal(self):
         items_list = []
         for i in self.items:
             items_list.append(i.get_item_dict())
         info = {
             "create_time": self.create_time,
             "pay_time": self.pay_time,
-            "wx.order_no": self.wx_order_no,
             "total_price": self.total_price,
             "total_items_num": self.total_items,
             "state": self.state,
@@ -47,6 +51,19 @@ class orders(db.Model):
             "shop_name": self.shop.shop_name,
             "state": self.state,
             "first_item": self.items.first().item_name
+        }
+        return info
+
+    def get_order_dict_shop(self):
+        items_list = []
+        for i in self.items:
+            items_list.append(i.get_item_dict())
+        info = {
+            "pay_time": self.pay_time,
+            "total_price": self.total_price,
+            "total_items_num": self.total_items,
+            "state": self.state,
+            "items_list": items_list
         }
         return info
 
@@ -68,6 +85,7 @@ class order_items(db.Model):
     item_num = db.Column(db.Integer, nullable=False)
     item_price = db.Column(db.Float, nullable=False)
     item_name = db.Column(db.String(20), nullable=False)
+    specification_name = db.Column(db.String(15),)
 
     # 外键
     order_id = db.Column(db.Integer, db.ForeignKey("orders.id", ondelete="CASCADE"), nullable=False)
