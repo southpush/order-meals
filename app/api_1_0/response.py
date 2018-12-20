@@ -96,6 +96,14 @@ error_dict = {
         "message": "No such shop.",
         "code": 407
     },
+    408: {
+        "message": "No such order.",
+        "code": 408
+    },
+    409: {
+        "message": "No such image.",
+        "code": 409
+    },
     501: {
         "message": "This shop user has owned a shop.",
         "code": 501

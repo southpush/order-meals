@@ -18,7 +18,7 @@ class shop_order_list(Resource):
         a = pagination.items
         info = []
         for i in a:
-            info.append(i.get_order_dict())
+            info.append(i.get_order_dict_shop())
         return general_response(info={"message": info})
 
 

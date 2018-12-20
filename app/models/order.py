@@ -14,6 +14,9 @@ class orders(db.Model):
     state = db.Column(db.Integer, default=10)
     total_items = db.Column(db.Integer, nullable=False, default=0)
 
+    box_price = db.Column(db.Float, nullable=False, default=0)
+    send_cost = db.Column(db.Float, nullable=False, default=0)
+
     # 收货信息
     address_str = db.Column(db.String(200), nullable=False)
     receiver = db.Column(db.String(20), nullable=False)
@@ -29,7 +32,7 @@ class orders(db.Model):
 
     def get_order_dict_personal(self):
         items_list = []
-        for i in self.items:
+        for i in self.items.all():
             items_list.append(i.get_item_dict())
         info = {
             "create_time": self.create_time,
@@ -39,11 +42,13 @@ class orders(db.Model):
             "state": self.state,
             "shop_name": self.shop.shop_name,
             "shop_id": self.shop.id,
-            "items_list": items_list
+            "items_list": items_list,
+            "send_cost": self.send_cost,
+            "box_price": self.box_price
         }
         return info
 
-    def get_simple_dict(self):
+    def get_simple_dict_personal(self):
         info = {
             "create_time": self.create_time,
             "total_price": self.total_price,
@@ -60,6 +65,9 @@ class orders(db.Model):
             items_list.append(i.get_item_dict())
         info = {
             "pay_time": self.pay_time,
+            "address": self.address_str,
+            "receiver": self.receiver,
+            "contact_phone": self.contact_phone,
             "total_price": self.total_price,
             "total_items_num": self.total_items,
             "state": self.state,
@@ -71,7 +79,8 @@ class orders(db.Model):
         items = self.items.all()
         self.total_items = len(items)
         for i in items:
-            self.total_price += (i.item_price * i.item_num)
+            self.total_price += ((i.item_price + i.additional_costs) * i.item_num)
+        self.total_price += self.send_cost + self.box_price
         self.total_price = round(self.total_price, 2)
         return self.total_items, self.total_price
 
@@ -85,7 +94,8 @@ class order_items(db.Model):
     item_num = db.Column(db.Integer, nullable=False)
     item_price = db.Column(db.Float, nullable=False)
     item_name = db.Column(db.String(20), nullable=False)
-    specification_name = db.Column(db.String(15),)
+    specification_name = db.Column(db.String(15), nullable=True)
+    additional_costs = db.Column(db.Float, nullable=False, default=0)
 
     # 外键
     order_id = db.Column(db.Integer, db.ForeignKey("orders.id", ondelete="CASCADE"), nullable=False)
@@ -98,6 +108,9 @@ class order_items(db.Model):
             "item_price": self.item_price,
             "item_id": self.item_id
         }
+        if self.specification_name and self.additional_costs:
+            info["specification_name"] = self.specification_name
+            info["additional_costs"] = self.additional_costs
         return info
 
     def __repr__(self):

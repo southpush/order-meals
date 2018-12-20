@@ -21,10 +21,14 @@ class region(Resource):
 
 class user_personal_head_image(Resource):
     def get(self, image_name):
-        with open("app/static/user_personal_head/" + image_name, "rb") as f:
+        try:
+            f = open("app/static/user_personal_head/" + image_name, "rb")
             file = f.read()
-        resp = Response(file, mimetype="image/jpeg")
-        return resp
+            resp = Response(file, mimetype="image/jpeg")
+            return resp
+        except FileNotFoundError as e:
+            print(e.__repr__())
+            return general_response(err_code=409, status_code=404)
 
     @login_required_personal()
     def post(self, user):

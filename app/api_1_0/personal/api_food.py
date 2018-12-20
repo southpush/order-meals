@@ -12,7 +12,7 @@ from app.main.auth import login_required_personal
 # 获取地理位置附近的商铺
 from app.models import address
 from app.models.order import orders, order_items
-from app.models.shop import shop_items
+from app.models.shop import shop_items, item_specification, shop_info
 
 
 class nearby_shop(Resource):
@@ -36,16 +36,17 @@ class personal_orders(Resource):
             return general_response(err_code=101, status_code=400)
 
         order = user.order.filter_by(id=id).first()
-        if not order:
-            info = order.get_order_dict()
-        return general_response(info=info)
+        if order:
+            info = order.get_order_dict_personal()
+            return general_response(info=info)
+        return general_response(err_code=408, status_code=404)
 
     # 下单
     @login_required_personal()
     def post(self, user):
         data = reqparse.RequestParser()
         data.add_argument("item_list", type=str)
-        data.add_argument("shop_id", type=str)
+        data.add_argument("shop_id", type=int)
         data.add_argument("address_id", type=int)
         item_list = json.loads(data.parse_args()["item_list"])
         address_id = data.parse_args()["address_id"]
@@ -54,19 +55,42 @@ class personal_orders(Resource):
         contact = user.address.filter_by(id=address_id).first()
         if not contact:
             return general_response(err_code=701, status_code=400)
+        if not (shop_id and item_list):
+            return general_response(err_code=101, status_code=400)
+        shop = shop_info.query.filter_by(id=shop_id).first()
+        if not shop:
+            return general_response(err_code=407, status_code=404)
         order = orders(total_items=len(item_list), user_id=user.id, shop_id=shop_id,
                        address_str=contact.get_address_str(), contact_phone=contact.contact_phone,
-                       receiver=contact.receiver)
+                       receiver=contact.receiver, box_price=shop.box_price, send_cost=shop.send_cost)
         add_in_db(order)
         for a in item_list:
-            item = shop_items.query.filter_by(shop_id=shop_id).filter_by(id=int(a["item_id"])).first()
-            if item:
-                a = order_items(item_num=int(a["item_num"]), item_name=item.item_name,
-                                item_price=item.item_price, order_id=order.id, item_id=item.id)
-                add_in_db(a)
+            item_id = a["item_id"]
+            item_num = a["item_num"]
+            item = shop_items.query.filter_by(shop_id=shop_id).filter_by(id=item_id).first()
+            if not item:
+                continue
+            else:
+                b = order_items(item_num=item_num, item_name=item.item_name, item_price=item.item_price,
+                                order_id=order.id, item_id=item.id)
+                try:
+                    specification_id = a["specification_id"]
+                except KeyError as e:
+                    print(e.__repr__())
+                    specification_id = None
+                except TypeError as e:
+                    print(e.__repr__())
+                    specification_id = None
+                print(specification_id)
+                if specification_id:
+                    specification = item_specification.query.filter_by(item_id=item.id).\
+                        filter_by(id=specification_id).first()
+                    if specification:
+                        b.specification_name = specification.specification_name
+                        b.additional_costs = specification.additional_costs
+                add_in_db(b)
         num, price = order.count()
-
-        return general_response(info={"total_price": price, "total_num": num})
+        return general_response(info={"item_num": num, "total_price": price})
 
 
 class personal_orders_list(Resource):
@@ -78,7 +102,7 @@ class personal_orders_list(Resource):
         pagination = user.order.order_by(orders.id.desc()).paginate(page, per_page=10, error_out=False)
         info = []
         for i in pagination.items:
-            info.append(i.get_simple_dict())
+            info.append(i.get_simple_dict_personal())
         return general_response(info={"orders": info})
 
 

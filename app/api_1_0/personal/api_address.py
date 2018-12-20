@@ -87,10 +87,12 @@ class receipted_address(Resource):
         receiver = data.parse_args()["receiver"]
         address_id = data.parse_args()["address_id"]
 
-        a = user.address.filter_by(id=address_id).first()
-
-        if not a:
+        if not (province_id and city_id and area_id and detailed and contact_phone and receiver and address_id):
             return general_response(err_code=101, status_code=400)
+
+        a = user.address.filter_by(id=address_id).first()
+        if not a:
+            return general_response(err_code=404, status_code=404)
 
         if not (Region.query.filter_by(parent_id=1).filter_by(region_id=province_id).first()
                 and Region.query.filter_by(parent_id=province_id).filter_by(region_id=city_id).first()
@@ -120,9 +122,9 @@ class receipted_address(Resource):
         else:
             return general_response(info={"message": result["message"]}, status_code=400)
 
-        # if update_in_db(a):
-        #     return general_response(info={}, status_code=204)
-        return general_response(err_code=101, status_code=400)
+        if update_in_db(a):
+            return make_response("", 204)
+        return general_response(err_code=601, status_code=400)
 
     # 删除收货地址
     @login_required_personal()
