@@ -31,6 +31,9 @@ class user_personal_head_image(Resource):
         except FileNotFoundError as e:
             print(e.__repr__())
             return general_response(err_code=409, status_code=404)
+        except TypeError as e:
+            print(e.__repr__())
+            return general_response(err_code=702, status_code=400)
 
     @login_required_personal()
     def post(self, user):
@@ -67,6 +70,9 @@ class user_shop_head_image(Resource):
         except FileNotFoundError as e:
             print(e.__repr__())
             return general_response(err_code=409, status_code=404)
+        except TypeError as e:
+            print(e.__repr__())
+            return general_response(err_code=702, status_code=400)
 
     @login_required_shop()
     def post(self, user):
@@ -103,6 +109,9 @@ class shop_image(Resource):
         except FileNotFoundError as e:
             print(e.__repr__())
             return general_response(err_code=409, status_code=404)
+        except TypeError as e:
+            print(e.__repr__())
+            return general_response(err_code=702, status_code=400)
 
     @login_required_shop()
     def post(self, user):

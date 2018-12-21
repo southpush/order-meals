@@ -143,5 +143,9 @@ error_dict = {
     701: {
         "message": "Incorrect receiver information.",
         "code": 701
+    },
+    702: {
+        "message": "Incorrect file name.",
+        "code": 702
     }
 }
