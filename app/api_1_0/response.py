@@ -108,6 +108,10 @@ error_dict = {
         "message": "No such image.",
         "code": 409
     },
+    410: {
+        "message": "No such region.",
+        "code": 410
+    },
     501: {
         "message": "This shop user has owned a shop.",
         "code": 501

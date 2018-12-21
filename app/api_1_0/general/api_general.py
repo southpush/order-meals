@@ -13,6 +13,8 @@ from app.models.address import Region
 class region(Resource):
     def get(self, parent_id):
         region_list = Region.query.filter_by(parent_id=parent_id).all()
+        if not region_list:
+            return general_response(err_code=410, status_code=404)
         region_dict = {}
         for a in region_list:
             region_dict[a.region_name] = a.region_id
