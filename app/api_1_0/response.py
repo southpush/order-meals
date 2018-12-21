@@ -68,6 +68,10 @@ error_dict = {
         "message": "Fail in verify auth token.",
         "code": 302
     },
+    303: {
+        "message": "This user has not shop.",
+        "code": 303
+    },
     401: {
         "message": "Can't find this picture.",
         "code": 401

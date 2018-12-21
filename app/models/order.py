@@ -44,7 +44,8 @@ class orders(db.Model):
             "shop_id": self.shop.id,
             "items_list": items_list,
             "send_cost": self.send_cost,
-            "box_price": self.box_price
+            "box_price": self.box_price,
+            "order_id": self.id
         }
         return info
 
@@ -55,7 +56,8 @@ class orders(db.Model):
             "total_items_num": self.total_items,
             "shop_name": self.shop.shop_name,
             "state": self.state,
-            "first_item": self.items.first().item_name
+            "first_item": self.items.first().item_name,
+            "order_id": self.id
         }
         return info
 

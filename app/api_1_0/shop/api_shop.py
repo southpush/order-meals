@@ -69,35 +69,58 @@ class shop_info_application(Resource):
 
     @login_required_shop()
     def put(self, user):
+        shop = user.shop
+
+        if not shop:
+            return general_response(err_code=501, status_code=400)
+
         data = reqparse.RequestParser()
         data.add_argument("shop_name", type=str)
-        data.add_argument("contact_name", type=str)
-        data.add_argument("contact_phone", type=str)
-        data.add_argument("geocoding", type=str)
-        data.add_argument("address", type=str)
         data.add_argument("shop_introduction", type=str)
 
-        shop_name = data.parse_args()["shop_name"]
-        contact_name = data.parse_args()["contact_name"]
-        contact_phone = data.parse_args()["contact_phone"]
-        geocoding = data.parse_args()["geocoding"]
-        address = data.parse_args()["address"]
-        shop_introduction = data.parse_args()["shop_introduction"]
+        # 改过的这些字段
+        data.add_argument('province_id', type=int)
+        data.add_argument('city_id', type=int)
+        data.add_argument('area_id', type=int)
+        data.add_argument("detailed", type=str)
+        data.add_argument("contact", type=str)
 
-        if not (shop_name and contact_phone and contact_name and geocoding and address
-                and shop_introduction):
+        province_id = data.parse_args()["province_id"]
+        city_id = data.parse_args()["city_id"]
+        area_id = data.parse_args()["area_id"]
+        detailed = data.parse_args()["detailed"]
+        shop_name = data.parse_args()["shop_name"]
+        shop_introduction = data.parse_args()["shop_introduction"]
+        contact = data.parse_args()["contact"]
+        contact = json.loads(contact)
+
+        if not (shop_name and shop_introduction and detailed and province_id and city_id
+                and area_id and contact):
             return general_response(err_code=101, status_code=400)
-        shop = user.shop
+
+        info = shop_info(shop_name=shop_name, contact=contact, owner_id=user.id, shop_introduction=shop_introduction,
+                         province=province_id, city=city_id, area=area_id, detailed=detailed)
         shop.shop_name = shop_name
-        shop.contact_name = contact_name
-        shop.contact_phone = contact_phone
-        shop.geocoding = geocoding
-        shop.address = address
+        shop.contact = contact
         shop.shop_introduction = shop_introduction
-        if update_in_db(shop):
-            return make_response()
-        else:
-            return general_response(err_code=504, status_code=406)
+        shop.province = province_id
+        shop.city = city_id
+        shop.area = area_id
+        shop.detailed = detailed
+
+        url = "https://apis.map.qq.com/ws/geocoder/v1/"
+        d = {
+            "address": info.get_address_str(),
+            "key": glovar.map_key
+        }
+        result = requests.get(url=url, params=d).json()
+        shop.lat = result["result"]["location"]["lat"]
+        shop.lng = result["result"]["location"]["lng"]
+
+        if update_in_db(info):
+            return make_response("", 204)
+
+        return general_response(err_code=601, status_code=400)
 
 
 class working_shop_info(Resource):
@@ -122,7 +145,7 @@ class working_shop_info(Resource):
         shop.notic = notic
         shop.box_price = box_price
         if update_in_db(shop):
-            return make_response()
+            return make_response("", 204)
         return general_response(err_code=504, status_code=406)
 
 
@@ -166,7 +189,7 @@ class food_items(Resource):
                                   item_introduction=item["item_info"]["item_introduction"],
                                   shop_id=user.shop.id, item_category_id=category.id)
             add_in_db(new_item)
-        return make_response()
+        return make_response("", 204)
 
 
 # 食品规格的

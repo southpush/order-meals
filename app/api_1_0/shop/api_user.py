@@ -87,20 +87,15 @@ class user_info(Resource):
     def put(self, user):
         data = reqparse.RequestParser()
         data.add_argument("nickname", type=str)
-        data.add_argument("image_id", type=int)
         nickname = data.parse_args()["nickname"]
-        image_id = data.parse_args()["image_id"]
-        print(nickname)
-        print(image_id)
-        if get_img(img_id=image_id):
+        if nickname:
             user.nickname = nickname
-            user.head_img_id = image_id
             if update_in_db(user):
                 return make_response("", 204)
             else:
                 return general_response(err_code=601, status_code=400)
         else:
-            return general_response(err_code=401, status_code=404)
+            return general_response(err_code=101, status_code=400)
 
 
 class getTest(Resource):

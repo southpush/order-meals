@@ -71,7 +71,7 @@ class shop_info(db.Model):
         shop_dict = {
             "shop_id": self.id,
             "score": self.score,
-            "shop_image_name": self.shop_img_name,
+            "shop_img_name": self.shop_img_name,
             "shop_name": self.shop_name,
             "send_cost": self.send_cost
         }
