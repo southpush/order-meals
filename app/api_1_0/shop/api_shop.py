@@ -123,6 +123,27 @@ class shop_info_application(Resource):
         return general_response(err_code=601, status_code=400)
 
 
+class shop_license_application(Resource):
+    # 获取该商店的许可信息
+    @login_required_shop()
+    def get(self, user):
+        if not user.shop:
+            return general_response()
+        pass
+
+    @login_required_shop()
+    def post(self, user):
+        pass
+
+    @login_required_shop()
+    def put(self, user):
+        pass
+
+    @login_required_shop()
+    def delete(self, user):
+        pass
+
+
 class working_shop_info(Resource):
     @login_required_shop()
     def put(self, user):

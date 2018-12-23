@@ -10,7 +10,6 @@ from app.main.auth import login_required_personal
 
 
 # 获取地理位置附近的商铺
-from app.models import address
 from app.models.order import orders, order_items
 from app.models.shop import shop_items, item_specification, shop_info
 
@@ -91,6 +90,11 @@ class personal_orders(Resource):
                 add_in_db(b)
         num, price = order.count()
         return general_response(info={"item_num": num, "total_price": price})
+
+    # 顾客确认送达
+    @login_required_personal()
+    def put(self):
+        pass
 
 
 class personal_orders_list(Resource):

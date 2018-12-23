@@ -24,16 +24,16 @@ class DevelopmentConfig(Config):
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:258741@localhost:3307/development"
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:258741@localhost:3307/development?charset=utf8"
 
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:258741@localhost:3307/test"
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:258741@localhost:3307/test?charset=utf8"
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:258741@localhost:3307/production"
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:258741@localhost:3307/production?charset=utf8"
 
 
 config = {

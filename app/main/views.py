@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import jsonify, Response, render_template
 
-from app.api_1_0.response import general_response
 from . import main
 
 
