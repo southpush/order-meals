@@ -82,7 +82,7 @@ class user(Resource):
                 token = user.generate_auth_token()
                 return general_response(token=token)
             else:
-                return general_response(err_code=104, status_code=406)
+                return general_response(err_code=602, status_code=406)
 
 
 # get方法为获取用户信息， post方法为获取表单，更改用户信息
@@ -103,19 +103,12 @@ class user_info(Resource):
         user.nickname = nickname
         if not update_in_db(user):
             return general_response(err_code=601, status_code=400)
-        return make_response("", 204)
+        return general_response()
 
 
 class getTest(Resource):
     def get(self):
-        data = reqparse.RequestParser()
-        data.add_argument("test", type=str)
-        test = data.parse_args()["test"]
-        print(test)
-        file = request.files.get("file")
-        print(file)
-
-        return make_response()
+        return general_response(err_code=101, status_code=400)
 
 
 class getTest2(Resource):
@@ -130,7 +123,7 @@ class getTest2(Resource):
         file = request.files.get("file")
         if file:
             file.seek(0)
-            return make_response()
+            return general_response()
 
 
 class loginTest1(Resource):
@@ -179,4 +172,4 @@ class testRL(Resource):
                 token = user.generate_auth_token()
                 return general_response(token=token)
             else:
-                return general_response(err_code=104, status_code=406)
+                return general_response(err_code=602, status_code=406)

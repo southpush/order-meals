@@ -16,7 +16,7 @@ class shop_info(db.Model):
     send_cost = db.Column(db.Float, nullable=True, default=0)
     notic = db.Column(db.String(200), nullable=True, default="")
     score = db.Column(db.Float, nullable=True, default=0)
-    shop_img_name = db.Column(db.String(50), nullable=True)
+    shop_img_name = db.Column(db.String(50), nullable=False, default="default.jpg")
     box_price = db.Column(db.Float, nullable=True, default=0)
     status = db.Column(db.Integer, nullable=False, default=10)
 
@@ -144,6 +144,8 @@ class shop_items(db.Model):
 
     # 反向引用
     specification = db.relationship("item_specification", backref=db.backref("item"), uselist=True,
+                                    lazy="dynamic", cascade="all, delete-orphan", passive_deletes=True)
+    order_item = db.relationship("order_items", backref=db.backref("shop_item"), uselist=True,
                                     lazy="dynamic", cascade="all, delete-orphan", passive_deletes=True)
 
     def get_item_detail(self):

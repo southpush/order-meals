@@ -37,8 +37,8 @@ class orders(db.Model):
         for i in self.items.all():
             items_list.append(i.get_item_dict())
         info = {
-            "create_time": self.create_time,
-            "pay_time": self.pay_time,
+            "create_time": self.create_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "pay_time": self.pay_time if not self.pay_time else self.pay_time.strftime("%Y-%m-%d %H:%M:%S"),
             "total_price": self.total_price,
             "total_items_num": self.total_items,
             "status": self.status,
@@ -47,7 +47,10 @@ class orders(db.Model):
             "items_list": items_list,
             "send_cost": self.send_cost,
             "box_price": self.box_price,
-            "order_id": self.id
+            "order_id": self.id,
+            "order_address": self.address_str,
+            "receiver": self.receiver,
+            "contact_phone": self.contact_phone
         }
         return info
 
@@ -56,6 +59,7 @@ class orders(db.Model):
             if (datetime.now() - self.create_time).days > 0 or (datetime.now() - self.create_time).seconds > 800:
                 self.status = order_status.shut_down_over_payment_time
                 db.session.commit()
+        # elif self.status == order_status.w
         db.session.commit()
         info = {
             "create_time": self.create_time,
@@ -64,7 +68,8 @@ class orders(db.Model):
             "shop_name": self.shop.shop_name,
             "status": self.status,
             "first_item": self.items.first().item_name,
-            "order_id": self.id
+            "order_id": self.id,
+            "shop_image_name": self.shop.shop_img_name
         }
         return info
 
@@ -123,7 +128,8 @@ class order_items(db.Model):
             "item_num": self.item_num,
             "item_name": self.item_name,
             "item_price": self.item_price,
-            "item_id": self.item_id
+            "item_id": self.item_id,
+            "item_image_name": self.shop_item.item_image_name
         }
         if self.specification_name and self.additional_costs:
             info["specification_name"] = self.specification_name

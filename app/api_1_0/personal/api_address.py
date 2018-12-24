@@ -65,7 +65,7 @@ class receipted_address(Resource):
         a.lng = result["result"]["location"]["lng"]
 
         if add_in_db(a):
-            return make_response("", 204)
+            return general_response()
         return general_response(err_code=101, status_code=400)
 
     @login_required_personal()
@@ -123,7 +123,7 @@ class receipted_address(Resource):
             return general_response(info={"message": result["message"]}, status_code=400)
 
         if update_in_db(a):
-            return make_response("", 204)
+            return general_response()
         return general_response(err_code=601, status_code=400)
 
     # 删除收货地址
@@ -138,7 +138,7 @@ class receipted_address(Resource):
 
         delete_in_db(a)
 
-        return make_response("", 204)
+        return general_response()
 
 
 class receipted_address_list(Resource):
@@ -180,4 +180,4 @@ class receipted_address_list(Resource):
         update_in_db(a)
         update_in_db(b)
 
-        return make_response("", 204)
+        return general_response()

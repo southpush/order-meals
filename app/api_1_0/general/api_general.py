@@ -129,10 +129,11 @@ class shop_image(Resource):
             return general_response(err_code=107, status_code=403)
         file.seek(0)
         if shop.shop_img_name:
-            try:
-                os.remove(path + user.head_image_name)
-            except FileNotFoundError as e:
-                print(e.__repr__())
+            if not shop.shop_img_name == "default.jpg":
+                try:
+                    os.remove(path + user.head_image_name)
+                except FileNotFoundError as e:
+                    print(e.__repr__())
 
         filename = str(shop.id) + file.filename
         file.save(path+filename)

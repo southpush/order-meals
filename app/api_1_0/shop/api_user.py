@@ -74,7 +74,7 @@ class user(Resource):
                 token = user.generate_auth_token()
                 return general_response(token=token)
             else:
-                return general_response(err_code=104, status_code=406)
+                return general_response(err_code=602, status_code=406)
 
 
 class user_info(Resource):
@@ -91,7 +91,7 @@ class user_info(Resource):
         if nickname:
             user.nickname = nickname
             if update_in_db(user):
-                return make_response("", 204)
+                return general_response()
             else:
                 return general_response(err_code=601, status_code=400)
         else:
@@ -159,4 +159,4 @@ class testRL(Resource):
                 token = user.generate_auth_token()
                 return general_response(token=token)
             else:
-                return general_response(err_code=104, status_code=406)
+                return general_response(err_code=602, status_code=406)

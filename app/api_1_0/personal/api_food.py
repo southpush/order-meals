@@ -33,7 +33,6 @@ class personal_orders(Resource):
         data = reqparse.RequestParser()
         data.add_argument("order_id", type=int)
         id = data.parse_args()["order_id"]
-
         if not id:
             return general_response(err_code=101, status_code=400)
 
@@ -103,7 +102,7 @@ class personal_orders(Resource):
         if order:
             order.status = order_status.arrived
             update_in_db(order)
-            return make_response("", 204)
+            return general_response()
         return general_response(err_code=408, status_code=404)
 
 
@@ -149,7 +148,7 @@ class personal_favorites(Resource):
         if shop_info.query.filter_by(id=shop_id).first():
             a = favorites(user_id=user.id, shop_id=shop_id)
             add_in_db(a)
-            return make_response("", 204)
+            return general_response()
         return general_response(err_code=407, status_code=404)
 
     @login_required_personal()
@@ -160,7 +159,7 @@ class personal_favorites(Resource):
         a = favorites.query.filter_by(user_id=user.id).filter_by(shop_id=shop_id).first()
         if a:
             delete_in_db(a)
-            return make_response("", 204)
+            return general_response()
         return general_response(err_code=411, status_code=404)
 
 
@@ -182,8 +181,9 @@ class order_pay(Resource):
                 # 这里写支付的逻辑代码
                 # 支付之后是等待商家接单
                 order.status = order_status.waiting_for_receive
+                order.pay_time = datetime.now()
                 if update_in_db(order):
-                    return make_response("", 204)
+                    return general_response()
                 else:
                     return general_response(err_code=601, status_code=406)
         return general_response(err_code=408, status_code=404)
@@ -204,12 +204,12 @@ class order_cancel(Resource):
             # 这里写退款的逻辑代码
             order.status = order_status.shut_down_no_pay
             update_in_db(order)
-            return make_response("", 204)
+            return general_response()
         elif order.status == order_status.waiting_for_receive:
             # 这里写退款的逻辑代码
             order.status = order_status.shut_down_return_to_personal
             update_in_db(order)
-            return make_response("", 204)
+            return general_response()
         elif order.status == order_status.waiting_for_delivery:
             data.add_argument("personal_reason")
             personal_reason = data.parse_args()["personal_reason"]
@@ -220,7 +220,7 @@ class order_cancel(Resource):
                 # 订单付款了取消的在这
                 order.status = order_status.personal_cancel
                 update_in_db(order)
-                return make_response("", 204)
+                return general_response()
             else:
                 return general_response(err_code=602, status_code=406)
         else:

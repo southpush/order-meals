@@ -7,13 +7,18 @@ def general_response(info=None, err_code=None, status_code=200, token=None):
         rst = make_response(jsonify(error_dict[err_code]), status_code)
 
     if info:
-        rst = make_response(jsonify(info), status_code)
+        c = {"code:": 0, "message": "Success."}
+        c.update(info)
+        rst = make_response(jsonify(c), status_code)
         if token:
             rst.set_cookie("token", token.decode("ascii"))
 
     if not err_code and not info and token:
-        rst = make_response()
+        rst = make_response(jsonify({"code:": 0, "message": "Success."}))
         rst.set_cookie("token", token.decode("ascii"))
+
+    if not info and not err_code and not token:
+        rst = make_response(jsonify({"code:": 0, "message": "Success."}), 200)
 
     rst.headers["Access-Control-Allow-Origin"] = "*"
     return rst
@@ -21,127 +26,99 @@ def general_response(info=None, err_code=None, status_code=200, token=None):
 
 error_dict = {
     101: {
-        "message": "Missing information.",
+        "message": "传入的数据缺少某个字段。",
         "code": 101
     },
     102: {
-        "message": "This wxUser has been registered.",
+        "message": "该微信用户已被注册过。",
         "code": 102
     },
     103: {
-        "message": "This phone has been registered.",
+        "message": "这个电话已经注册过。",
         "code": 103
     },
-    104: {
-        "message": "Add user error.",
-        "code": 104
-    },
-    105: {
-        "message": "Fail in uploading image into database.",
-        "code": 105
-    },
-    106: {
-        "message": "Can't find this picture.",
-        'code': 106
-    },
     107: {
-        "message": "The file is too large, size limit in 1m.",
+        "message": "传入文件过大，请限制在1m之内。.",
         "code": 107
     },
     108: {
-        "message": "The file format is incorrect.",
+        "message": "传入文件格式不正确，请确认图片格式为jpg、jpeg或png。",
         "code": 108
     },
     201: {
-        "message": "Invalid code.",
+        "message": "无效的微信code。",
         "code": 201
     },
     202: {
-        "message": "Can't find this user.",
+        "message": "无法找到该用户。",
         "code": 202
     },
     301: {
-        "message": "Has no token.",
+        "message": "缺少登陆令牌。",
         "code": 301
     },
     302: {
-        "message": "Fail in verify auth token.",
+        "message": "验证登陆令牌失败。",
         "code": 302
     },
     303: {
-        "message": "This user has not shop.",
+        "message": "该用户尚未注册商铺。",
         "code": 303
     },
-    401: {
-        "message": "Can't find this picture.",
-        "code": 401
-    },
     402: {
-        "message": "Incorrect relationship or incorrect region id.",
+        "message": "错误的省市区关系或错误的地理编码",
         "code": 402
     },
     403: {
-        "message": "This user has not address.",
+        "message": "该用户尚未添加地址。",
         "code": 403
     },
     404: {
-        "message": 'No such address.',
+        "message": '无法找到该地址。',
         "code": 404
     },
     405: {
-        "message": "No such item specification.",
+        "message": "无法找到该商品规格",
         "code": 405
     },
     406: {
-        "message": "This shop has no such shop item.",
+        "message": "无法在该商店找到该商品。",
         "code": 406
     },
     407: {
-        "message": "No such shop.",
+        "message": "无法找到该商铺。",
         "code": 407
     },
     408: {
-        "message": "No such order.",
+        "message": "无法找到该订单。",
         "code": 408
     },
     409: {
-        "message": "No such image.",
+        "message": "无法找到该图片。",
         "code": 409
     },
     410: {
-        "message": "No such region.",
+        "message": "无法找到该地区。",
         "code": 410
     },
     411: {
-        "message": "No such favorites.",
+        "message": "无法找到该收藏。",
         "code": 411
     },
     501: {
-        "message": "This shop user has owned a shop.",
+        "message": "该商铺用户已经注册过一个商铺。",
         "code": 501
     },
-    502: {
-        "message": "Add shop error.",
-        "code": 502
-    },
-    503: {
-        'message': "This shop user has not shop.",
-        "code": 503
-    },
-    504: {
-        "message": "Fail in updating the shop info.",
-        "code": 504
-    },
     601: {
-        "message": "Fail in updating in database.",
+        "message": "数据库更新数据时出现不可预测的错误。",
         "code": 601
     },
     602: {
-        "message": "Fail in adding in database.",
+        "message": "数据库添加数据时出现不可预测的错误。",
         "code": 602
     },
     603: {
-        "message": "Fail in delete in database.",
+        "message": "数据库删除数据时出现不可预测的错误。",
         "code": 603
     },
     701: {
@@ -149,15 +126,15 @@ error_dict = {
         "code": 701
     },
     702: {
-        "message": "Incorrect file name.",
+        "message": "错误的收货信息，无法找到该收货信息。",
         "code": 702
     },
     703: {
-        "message": "This order status can't be canceled",
+        "message": "该订单所处的状态无法取消订单。",
         "code": 703
     },
     704: {
-        "message": "This order has over the payment time.",
+        "message": "该订单已超过支付时间。",
         "code": 704
     }
 }

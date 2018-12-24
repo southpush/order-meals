@@ -18,7 +18,7 @@ class shop_info_application(Resource):
     @login_required_shop()
     def get(self, user):
         if not user.shop:
-            return general_response(err_code=503, status_code=404)
+            return general_response(err_code=303, status_code=404)
         shop_dict = user.shop.get_shop_info()
         return general_response(shop_dict)
 
@@ -65,9 +65,8 @@ class shop_info_application(Resource):
         info.lng = result["result"]["location"]["lng"]
 
         if add_in_db(info):
-            return make_response()
-
-        return general_response(err_code=502, status_code=400)
+            return general_response()
+        return general_response(err_code=602, status_code=400)
 
     @login_required_shop()
     def put(self, user):
@@ -120,7 +119,7 @@ class shop_info_application(Resource):
         shop.lng = result["result"]["location"]["lng"]
 
         if update_in_db(info):
-            return make_response("", 204)
+            return general_response()
 
         return general_response(err_code=601, status_code=400)
 
@@ -161,15 +160,15 @@ class working_shop_info(Resource):
         box_price = data.parse_args()["box_price"]
         shop = user.shop
         if not shop:
-            return general_response(err_code=503, status_code=404)
+            return general_response(err_code=303, status_code=404)
 
         shop.floor_send_cost = floor_send_cost
         shop.send_cost = send_cost
         shop.notic = notic
         shop.box_price = box_price
         if update_in_db(shop):
-            return make_response("", 204)
-        return general_response(err_code=504, status_code=406)
+            return general_response()
+        return general_response(err_code=601, status_code=406)
 
 
 class food_items(Resource):
@@ -219,7 +218,7 @@ class food_items(Resource):
                                   item_introduction=item["item_info"]["item_introduction"],
                                   shop_id=user.shop.id, item_category_id=category.id)
             add_in_db(new_item)
-        return make_response("", 204)
+        return general_response()
 
 
 # 食品规格的
@@ -256,7 +255,7 @@ class food_specification(Resource):
                                item_id=item_id)
 
         if add_in_db(a):
-            return make_response("", 204)
+            return general_response()
         return general_response(err_code=602, status_code=400)
 
     # 商家修改规格参数
@@ -277,7 +276,7 @@ class food_specification(Resource):
                 a.specification_name = specification_name
                 a.additional_costs = additional_costs
                 if update_in_db(a):
-                    return make_response("", 204)
+                    return general_response()
                 return general_response(err_code=601, status_code=400)
         return general_response(err_code=405, status_code=404)
 
@@ -293,7 +292,7 @@ class food_specification(Resource):
         if a:
             if a.item in user.shop.items.all():
                 if delete_in_db(a):
-                    return make_response("", 204)
+                    return general_response()
                 else:
                     return general_response(err_code=603, status_code=400)
         else:
@@ -333,7 +332,7 @@ class received_orders(Resource):
         if order:
             order.status = order_status.shut_down_shop_no_receive
             update_in_db(order)
-            return make_response("", 204)
+            return general_response()
         else:
             return general_response(err_code=408, status_code=404)
 
@@ -347,7 +346,7 @@ class received_orders(Resource):
         if order:
             order.status = order_status.waiting_for_delivery
             update_in_db(order)
-            return make_response("", 204)
+            return general_response()
         else:
             return general_response(err_code=408, status_code=404)
 
@@ -397,7 +396,7 @@ class canceled_orders(Resource):
                 update_in_db(charge)
             else:
                 return general_response(err_code=101, status_code=400)
-            return make_response("", 204)
+            return general_response()
         else:
             return general_response(err_code=408, status_code=404)
 
@@ -414,7 +413,7 @@ class canceled_orders(Resource):
             # 处理商家接受退款的
             order.status = order_status.shut_down_return_to_personal
             update_in_db(order)
-            return make_response("", 204)
+            return general_response()
         else:
             return general_response(err_code=408, status_code=404)
 
