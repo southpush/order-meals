@@ -11,7 +11,7 @@ class orders(db.Model):
     pay_time = db.Column(db.DateTime)
     wx_order_no = db.Column(db.String(32), nullable=True)
     total_price = db.Column(db.Float, nullable=False, default=0)
-    state = db.Column(db.Integer, default=10)
+    status = db.Column(db.Integer, nullable=False, default=10)
     total_items = db.Column(db.Integer, nullable=False, default=0)
 
     box_price = db.Column(db.Float, nullable=False, default=0)
@@ -29,6 +29,8 @@ class orders(db.Model):
     # 反向引用
     items = db.relationship("order_items", backref=db.backref("order"), lazy="dynamic",
                             cascade="all, delete-orphan", passive_deletes=True)
+    charge_back_info = db.relationship("charge_back_info", backref=db.backref("order"), uselist=False,
+                                       lazy="select", cascade="all, delete-orphan", passive_deletes=True)
 
     def get_order_dict_personal(self):
         items_list = []
@@ -39,7 +41,7 @@ class orders(db.Model):
             "pay_time": self.pay_time,
             "total_price": self.total_price,
             "total_items_num": self.total_items,
-            "state": self.state,
+            "status": self.status,
             "shop_name": self.shop.shop_name,
             "shop_id": self.shop.id,
             "items_list": items_list,
@@ -50,12 +52,17 @@ class orders(db.Model):
         return info
 
     def get_simple_dict_personal(self):
+        if self.status == order_status.waiting_for_pay:
+            if (datetime.now() - self.create_time).days > 0 or (datetime.now() - self.create_time).seconds > 800:
+                self.status = order_status.shut_down_over_payment_time
+                db.session.commit()
+        db.session.commit()
         info = {
             "create_time": self.create_time,
             "total_price": self.total_price,
             "total_items_num": self.total_items,
             "shop_name": self.shop.shop_name,
-            "state": self.state,
+            "status": self.status,
             "first_item": self.items.first().item_name,
             "order_id": self.id
         }
@@ -72,7 +79,7 @@ class orders(db.Model):
             "contact_phone": self.contact_phone,
             "total_price": self.total_price,
             "total_items_num": self.total_items,
-            "state": self.state,
+            "status": self.status,
             "items_list": items_list
         }
         return info
@@ -87,7 +94,15 @@ class orders(db.Model):
         return self.total_items, self.total_price
 
     def __repr__(self):
-        return "<comment id = %r>" % self.id
+        return "<order id = %r>" % self.id
+
+    @property
+    def status_info(self):
+        return order_status.status_dict[int(self.status)]
+
+    # @property
+    # def status(self):
+    #     if self.status == 20 and (datetime.now() - self.pay_time)
 
 
 class order_items(db.Model):
@@ -117,3 +132,55 @@ class order_items(db.Model):
 
     def __repr__(self):
         return "<order items id = '%r'>" % self.id
+
+
+class charge_back_info(db.Model):
+    __tablename__ = "charge_back_info"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    personal_reason = db.Column(db.String(300), nullable=False)
+    shop_reason = db.Column(db.String(300), nullable=True)
+    admin_reason = db.Column(db.String(300), nullable=True)
+
+    # 外键
+    order_id = db.Column(db.Integer, db.ForeignKey("orders.id", ondelete="CASCADE"), nullable=False)
+
+    def get_charge_back_info_dict(self):
+        info = {
+            "charge_back_info_id": self.id,
+            "personal_reason": self.personal_reason,
+            "shop_reason": self.shop_reason,
+            "admin_reason": self.admin_reason,
+        }
+        return info
+
+
+class order_status:
+    waiting_for_pay = 10
+    waiting_for_receive = 11
+    waiting_for_delivery = 20
+    # 订单到达
+    arrived = 30
+    personal_cancel = 40
+    shop_refuse = 41
+    # 5开头的状态都算在订单关闭里了
+    shut_down_no_pay = 50
+    shut_down_return_to_personal = 51
+    shut_down_return_to_shop = 52
+    shut_down_over_payment_time = 53
+    shut_down_shop_no_receive = 54
+    # 订单正常完成的
+    completed = 60
+
+    status_dict = {
+        10: "waiting_for_pay",
+        11: "waiting_for_receive",
+        20: "waiting_for_delivery",
+        30: "arrived",
+        40: "personal_cancel",
+        41: "shop_refuse",
+        50: " shut_down_no_pay",
+        51: "shut_down_return_to_personal",
+        52: "shut_down_return_to_shop",
+        52: "shut_down_over_payment_time",
+        60: "completed"
+    }

@@ -21,6 +21,8 @@ class user_personal(db.Model):
                               lazy="dynamic", cascade="all, delete-orphan", passive_deletes=True)
     order = db.relationship("orders", backref=db.backref("user"), uselist=True,
                             lazy="dynamic", cascade="all, delete-orphan", passive_deletes=True)
+    favorites = db.relationship("favorites", backref=db.backref("user"), uselist=True,
+                                lazy="dynamic", cascade="all, delete-orphan", passive_deletes=True)
 
     # 将password设置成不可读属性
     @property

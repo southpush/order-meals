@@ -2,7 +2,7 @@
 import os
 
 from flask import request, Response
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 
 from app.api_1_0.response import general_response
 from app.db.user_db import update_in_db
@@ -140,5 +140,49 @@ class shop_image(Resource):
         update_in_db(shop)
         return general_response({"success": shop.shop_img_name})
 
+
+class shop_item_image(Resource):
+    def get(self, image_name):
+        try:
+            f = open("app/static/shop_item_image/" + image_name, "rb")
+            file = f.read()
+            resp = Response(file, mimetype="image/jpeg")
+            return resp
+        except FileNotFoundError as e:
+            print(e.__repr__())
+            return general_response(err_code=409, status_code=404)
+        except TypeError as e:
+            print(e.__repr__())
+            return general_response(err_code=702, status_code=400)
+
+    @login_required_shop()
+    def post(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("item_id", type=int)
+        item_id = data.parse_args()["item_id"]
+        path = "app/static/shop_item_image/"
+        file = request.files.get("file")
+        item = user.shop.items.filter_by(id=item_id).first()
+        if not item:
+            return general_response(err_code=406, status_code=404)
+        if not file:
+            return general_response(err_code=101, status_code=400)
+        if file.filename.split(".")[-1] not in ["jpg", "jpeg", "png"]:
+            return general_response(err_code=108, status_code=400)
+        file.seek(0, 2)
+        if file.tell() > 1048576:
+            return general_response(err_code=107, status_code=403)
+        file.seek(0)
+        if item.item_image_name:
+            try:
+                os.remove(path + user.head_image_name)
+            except FileNotFoundError as e:
+                print(e.__repr__())
+
+        filename = str(item.id) + file.filename
+        file.save(path + filename)
+        item.item_image_name = filename
+        update_in_db(item)
+        return general_response({"success": item.item_image_name})
 
 

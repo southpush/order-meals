@@ -18,7 +18,7 @@ class shop_info(db.Model):
     score = db.Column(db.Float, nullable=True, default=0)
     shop_img_name = db.Column(db.String(50), nullable=True)
     box_price = db.Column(db.Float, nullable=True, default=0)
-    state = db.Column(db.Integer, nullable=False, default=10)
+    status = db.Column(db.Integer, nullable=False, default=10)
 
     # 商铺地址
     province = db.Column(db.Integer, nullable=False)
@@ -44,6 +44,8 @@ class shop_info(db.Model):
                                     lazy="dynamic", cascade="all, delete-orphan", passive_deletes=True)
     order = db.relationship("orders", backref=db.backref("shop"), uselist=True,
                             lazy="dynamic", cascade="all, delete-orphan", passive_deletes=True)
+    favorites = db.relationship("favorites", backref=db.backref("shop"), uselist=True,
+                                lazy="dynamic", cascade="all, delete-orphan", passive_deletes=True)
 
     def __repr__(self):
         return "<shop %r>" % self.shop_name
@@ -58,7 +60,7 @@ class shop_info(db.Model):
             "score": self.score,
             "shop_img": self.shop_img_name,
             "box_price": self.box_price,
-            "state": self.state,
+            "status": self.status,
             "contact": self.contact,
             "address_dict": self.get_address_dict(),
             "address_str": self.get_address_str(),
@@ -133,7 +135,8 @@ class shop_items(db.Model):
     item_stock = db.Column(db.Integer, nullable=False, default=0)
     item_price = db.Column(db.Float, nullable=False, default=0)
     item_introduction = db.Column(db.String(128), nullable=True)
-    state = db.Column(db.Boolean, nullable=False, default=True)
+    status = db.Column(db.Boolean, nullable=False, default=True)
+    item_image_name = db.Column(db.String(100), nullable=True)
 
     # 外键
     shop_id = db.Column(db.Integer, db.ForeignKey("shop_info.id", ondelete="CASCADE"), nullable=False)  # type: Column
@@ -147,7 +150,6 @@ class shop_items(db.Model):
         specification_list = []
         for i in self.specification.all():
             specification_list.append(i.get_specification_dict())
-
         item_dict = {
             "item_name": self.item_name,
             "shop_item_id": self.id,
@@ -155,7 +157,9 @@ class shop_items(db.Model):
             "item_stock": self.item_stock,
             "item_price": self.item_price,
             "item_introduction": self.item_introduction,
-            "item_specification": specification_list
+            "item_image_name": self.item_image_name,
+            "specification_list": specification_list,
+            "category_id": self.item_category_id
         }
         return item_dict
 

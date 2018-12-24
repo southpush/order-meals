@@ -109,19 +109,13 @@ class user_info(Resource):
 class getTest(Resource):
     def get(self):
         data = reqparse.RequestParser()
-        data.add_argument("testlist", type=str)
-        testlist = data.parse_args()["testlist"]
-        print(testlist)
-        tl = json.loads(testlist)
-        print(tl)
+        data.add_argument("test", type=str)
+        test = data.parse_args()["test"]
+        print(test)
+        file = request.files.get("file")
+        print(file)
 
-        for i in tl:
-            k = tuple(i)
-            print(k)
-        td = {
-            "testdict": tl
-        }
-        return general_response(info=td)
+        return make_response()
 
 
 class getTest2(Resource):

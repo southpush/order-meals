@@ -15,3 +15,13 @@ class comment(db.Model):
     def __repr__(self):
         return "<comment id = %r>" % self.id
 
+
+class favorites(db.Model):
+    __tablename__ = "favorites"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    # 外键
+    user_id = db.Column(db.Integer, db.ForeignKey("user_personal.id", ondelete="CASCADE"), nullable=False)
+    shop_id = db.Column(db.Integer, db.ForeignKey("shop_info.id", ondelete="CASCADE"), nullable=False)
+
+

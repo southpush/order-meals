@@ -9,6 +9,8 @@ from app.api_1_0.response import general_response
 from app.db.user_db import add_in_db, update_in_db, delete_in_db
 from app.main.auth import login_required_shop
 from flask_restful import Resource, reqparse
+
+from app.models.order import orders, order_status
 from app.models.shop import shop_info, item_specification, item_category, shop_items
 
 
@@ -179,19 +181,26 @@ class food_items(Resource):
         if not shop:
             return general_response(err_code=407, status_code=404)
         category_list = shop.item_category.all()
-        info = []
+        shop_items_list = shop.items.all()
+        a_list = []
         for a in category_list:
             one_dict = {
                 "category_id": a.id,
-                "category_name": a.category_name
+                "category_name": a.category_name,
             }
-            item_list = []
-            for b in a.items.all():
-                item_list.append(b.get_item_detail())
-            one_dict["item_list"] = item_list
-            info.append(one_dict)
+            a_list.append(one_dict)
 
-        return general_response(info={"food": info})
+        b_list = []
+        for b in shop_items_list:
+            b_list.append(b.get_item_detail())
+
+        info = {
+            "category_list": a_list,
+            "shop_items_list": b_list,
+            "shop_info": shop.get_shop_info()
+        }
+
+        return general_response(info=info)
 
     @login_required_shop()
     def post(self, user):
@@ -289,4 +298,124 @@ class food_specification(Resource):
                     return general_response(err_code=603, status_code=400)
         else:
             return general_response(err_code=405, status_code=404)
+
+
+class received_orders(Resource):
+    # 查看自己的可以接单的订单
+    @login_required_shop()
+    def get(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("page", type=int)
+        page = data.parse_args()["page"]
+        order_list = user.shop.order.filter_by(status=order_status.waiting_for_receive).order_by(orders.id).\
+            paginate(page, per_page=15, error_out=False)
+        a = []
+        for i in order_list.items:
+            a.append(i.get_order_dict_shop())
+
+        info = {
+            "order_list": a,
+            "has_next": order_list.has_next,
+            "page_here": order_list.page,
+            "per_page": order_list.per_page,
+            "total_pages": order_list.pages,
+            "total": order_list.total
+        }
+        return general_response(info=info)
+
+    # 不接单
+    @login_required_shop()
+    def post(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("order_id", type=int)
+        order_id = data.parse_args()["order_id"]
+        order = user.shop.order.filter_by(status=order_status.waiting_for_receive).filter_by(id=order_id).first()
+        if order:
+            order.status = order_status.shut_down_shop_no_receive
+            update_in_db(order)
+            return make_response("", 204)
+        else:
+            return general_response(err_code=408, status_code=404)
+
+    # 接单
+    @login_required_shop()
+    def put(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("order_id", type=int)
+        order_id = data.parse_args()["order_id"]
+        order = user.shop.order.filter_by(status=order_status.waiting_for_receive).filter_by(id=order_id).first()
+        if order:
+            order.status = order_status.waiting_for_delivery
+            update_in_db(order)
+            return make_response("", 204)
+        else:
+            return general_response(err_code=408, status_code=404)
+
+
+class canceled_orders(Resource):
+    # 获取用户摁了取消的需要商家处理的订单
+    @login_required_shop()
+    def get(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("page", type=int)
+        page = data.parse_args()["page"]
+        pagination = user.shop.order.filter_by(status=order_status.personal_cancel).\
+            order_by(orders.id.desc()).paginate(page, per_page=10, error_out=False)
+        order_list = []
+        for i in pagination.items:
+            d = {}
+            d.update(i.get_order_dict_shop())
+            d.update(i.charge_back_info.get_charge_back_info_dict())
+            order_list.append(d)
+        info = {
+            "order_list": order_list,
+            "has_next": pagination.has_next,
+            "page_here": pagination.page,
+            "per_page": pagination.per_page,
+            "total_pages": pagination.pages,
+            "total": pagination.total
+        }
+        return general_response(info=info)
+
+    # 拒绝取消订单
+    @login_required_shop()
+    def post(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("order_id", type=int)
+        data.add_argument("shop_reason", type=str)
+        order_id = data.parse_args()["order_id"]
+        shop_reason = data.parse_args()["shop_reason"]
+
+        order = user.shop.order.filter_by(status=order_status.personal_cancel).filter_by(id=order_id).first()
+
+        if order:
+            if shop_reason:
+                charge = order.charge_back_info
+                charge.shop_reason = shop_reason
+                order.status = order_status.shop_refuse
+                update_in_db(order)
+                update_in_db(charge)
+            else:
+                return general_response(err_code=101, status_code=400)
+            return make_response("", 204)
+        else:
+            return general_response(err_code=408, status_code=404)
+
+    # 接受取消订单的
+    @login_required_shop()
+    def put(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("order_id", type=int)
+        order_id = data.parse_args()["order_id"]
+
+        order = user.shop.order.filter_by(status=order_status.personal_cancel).filter_by(id=order_id).first()
+
+        if order:
+            # 处理商家接受退款的
+            order.status = order_status.shut_down_return_to_personal
+            update_in_db(order)
+            return make_response("", 204)
+        else:
+            return general_response(err_code=408, status_code=404)
+
 

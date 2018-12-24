@@ -112,6 +112,10 @@ error_dict = {
         "message": "No such region.",
         "code": 410
     },
+    411: {
+        "message": "No such favorites.",
+        "code": 411
+    },
     501: {
         "message": "This shop user has owned a shop.",
         "code": 501
@@ -147,5 +151,13 @@ error_dict = {
     702: {
         "message": "Incorrect file name.",
         "code": 702
+    },
+    703: {
+        "message": "This order status can't be canceled",
+        "code": 703
+    },
+    704: {
+        "message": "This order has over the payment time.",
+        "code": 704
     }
 }
