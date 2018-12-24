@@ -229,3 +229,84 @@ class item_specification(db.Model):
     def __repr__(self):
         return "<item_specification %r, belong item_id %r>" % (self.specification_name, self.item.id)
 
+
+# 整合的代码
+def ctd_shop(obj):
+    User_shop = user_shop.query.filter_by(id=obj.owner_id).first()
+    Shop_license = shop_license.query.filter_by(shop_id=obj.id).first()
+    # Orders = orders.query.filter_by(shop_id=obj.id).all()
+    return {
+        "id": obj.id,
+        "shop_name": obj.shop_name,
+        "shop_introduction": obj.shop_introduction,
+        "floor_send_cost": obj.floor_send_cost,
+        "send_cost": obj.send_cost,
+        "notic": obj.notic,
+        "score": obj.score,
+        "shop_img": obj.shop_img_name,
+        "box_price": obj.box_price,
+        "state": obj.status,
+        "contact": obj.contact,
+        "lat": obj.lat,
+        "lng": obj.lng,
+        "owner_id": obj.owner_id,
+        "address_str": obj.get_address_str(),
+        "phone": User_shop.phone,
+        "name": User_shop.nickname,
+        "license_id": Shop_license.id,
+
+    }
+
+def ctd_shop_order(obj,Orders):
+    User_shop = user_shop.query.filter_by(id=obj.owner_id).first()
+    count = len(Orders)
+    list = []
+    for i in Orders:
+        list.append(i.total_price)
+    total_price = 0
+    for i in list:
+        total_price += i
+    return {
+        "id": obj.id,
+        "shop_name": obj.shop_name,
+        "owner_id": obj.owner_id,
+        "address_str": obj.get_address_str(),
+        "phone": User_shop.phone,
+        "name": User_shop.nickname,
+        "total_price": total_price,
+        "count": count,
+    }
+
+
+class Status:
+    IN_SHOP = 00  # 商铺信息未审核
+    IN_EXAMINE = 10  # 许可证未审核
+    EXAMINE_NOT_PASS = 20  # 商铺信息未通过审核
+    LICENSE_NOT_PASS = 30  # 许可证未通过审核
+    EXAMINE_PASS = 40  # 商铺信息审核通过
+    LICENSE_PASS = 50  # 许可证通过审核
+    PASS = 60  # 申请商铺成功
+    # CLOSE_BUSINESS = 60  # 商店关闭
+
+
+def ctd_license(obj):
+    # result = json.dumps(obj, default=lambda obj: obj.__dict__)
+    # return result
+    return {
+        'id': obj.id,
+        'idcard_name': obj.idcard_name,
+        'business_name': obj.business_name,
+        'business_num': obj.business_num,
+        'service_name': obj.service_name,
+        'service_num': obj.service_num,
+        'state': obj.status,
+        'add_time': obj.add_time,
+        'idcard_num': obj.idcard_num,
+        'business_address': obj.business_address,
+        'business_begin_time': obj.business_begin_time,
+        'business_end_time': obj.business_end_time,
+        'service_address': obj.service_address,
+        'service_begin_time': obj.service_begin_time,
+        'service_end_time': obj.service_end_time,
+
+    }

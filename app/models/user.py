@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from app.models.address import address
 from .. import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
@@ -129,3 +130,32 @@ class user_shop(db.Model):
 
     def __repr__(self):
         return "<User_shop %r>" % self.nickname
+
+
+# 整合的代码
+def ctd(obj):
+    # result = json.dumps(obj, default=lambda obj: obj.__dict__)
+    # return result
+    Address = address.query.filter_by(id=obj.id).first()
+    return {
+        'id': obj.id,
+        'openid': obj.openid,
+        'phone': obj.phone,
+        'password_hash': obj.password_hash,
+        'nickname': obj.nickname,
+        'address': Address.get_address_str(),
+        'head_image_name': obj.head_image_name
+    }
+
+
+def ctd_usershop(obj):
+    # result = json.dumps(obj, default=lambda obj: obj.__dict__)
+    # return result
+    return {
+        'id': obj.id,
+        'openid': obj.openid,
+        'phone': obj.phone,
+        'password_hash': obj.password_hash,
+        'name': obj.nickname,
+        'head_image_name': obj.head_image_name
+    }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>iview example</title>
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
+    <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/iview/dist/iview.min.js"></script>
+    <style type="text/css">
+    	#myimg: {
+    		width: 70px;
+    	}
+    </style>
+</head>
+<body>
+<div id="app">
+    <i-button @click="show">今天您冲了吗？</i-button>
+    <Modal v-model="visible" title="今天怎么冲？" id="chong">
+    	<img id="myimg" v-bind:src="imgUrl" />
+        <p>不冲，滚</p>
+    </Modal>
+</div>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            visible: false,
+            imgUrl: ""
+        },
+        methods: {
+            show: function () {
+                this.visible = true;
+                this.imgUrl = "/static/fuck.jpg"
+            }
+        }
+    })
+  </script>
+</body>
+</html>

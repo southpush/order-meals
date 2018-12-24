@@ -87,8 +87,6 @@ class orders(db.Model):
             if (datetime.now() - self.pay_time).days > 2:
                 self.status = order_status.completed
                 db.session.commit()
-        # elif self.status == order_status.w
-        # db.session.commit()
         info = {
             "create_time": self.create_time,
             "total_price": self.total_price,
@@ -213,4 +211,46 @@ class order_status:
         52: "shut_down_return_to_shop",
         52: "shut_down_over_payment_time",
         60: "completed"
+    }
+
+
+# 整合的代码
+def ctd_orders(obj):
+    User_personal = user_personal.query.filter_by(id=obj.user_id).first()
+    return{
+        "id": obj.id,
+        "create_time": obj.create_time,
+        "pay_time": obj.pay_time,
+        "wx.order_no": obj.wx_order_no,
+        "total_price": obj.total_price,
+        "total_items": obj.total_items,
+        "state": obj.status,
+        "shop_id": obj.shop_id,
+        "address_str": obj.address_str,
+        "receiver": obj.receiver,
+        "contact_phone": obj.contact_phone,
+        "send_cost": obj.send_cost,
+        "box_price": obj.box_price,
+        "user_id": obj.user_id,
+        "username": User_personal.nickname
+
+    }
+
+
+def ctd_charge_back(obj):
+    Orders = orders.query.filter_by(id=obj.order_id).first()
+    User_personal = user_personal.query.filter_by(id=Orders.user_id).first()
+    User_shop = user_shop.query.filter_by(id=Orders.shop_id).first()
+    return {
+        "order_id": obj.order_id,
+        "charge_back_info_id": obj.id,
+        "personal_reason": obj.personal_reason,
+        "shop_reason": obj.shop_reason,
+        "admin_reason": obj.admin_reason,
+        "total_price": Orders.total_price,
+        "user_id": Orders.user_id,
+        "shop_id": Orders.shop_id,
+        "username": User_personal.nickname,
+        "business_name": User_shop.nickname
+
     }

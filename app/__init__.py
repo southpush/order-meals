@@ -15,8 +15,7 @@ mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
 loginmanager = LoginManager()
-loginmanager.session_protection = 'strong'
-loginmanager.login_view = 'main.user'
+loginmanager.login_view = ''
 loginmanager.login_message = "请先登录或者注册"
 api = Api()
 

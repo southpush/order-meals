@@ -1,0 +1,21 @@
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>register</title>
+</head>
+<body>
+
+<form action="{{ url_for('.register') }}" method='admin'>
+    {#    进入csrf验证#}
+    {{ form.csrf_token }}
+    <p>{{ form.name.label }}{{ form.name() }}{{ form.name.errors }}</p>
+    <p>{{ form.adminpass.label }}{{ form.adminpass() }}{{ form.adminpass.errors }}</p>
+    <p>{{ form.roleid.label }}{{ form.roleid() }}{{ form.roleid.errors }}</p>
+    <p>{{ form.register() }}</p>
+
+</form>
+
+</body>
+</html>
