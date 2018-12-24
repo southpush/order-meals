@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
+from datetime import datetime
 
 import requests
-from flask import make_response
-
 from app import glovar
 from app.api_1_0.response import general_response
 from app.db.user_db import add_in_db, update_in_db, delete_in_db
@@ -129,11 +128,46 @@ class shop_license_application(Resource):
     @login_required_shop()
     def get(self, user):
         if not user.shop:
-            return general_response()
-        pass
+            return general_response(err_code=303, status_code=404)
+        else:
+            info = user.shop.license.get_license_dict()
+            return general_response(info=info)
 
     @login_required_shop()
     def post(self, user):
+        # data = reqparse.RequestParser()
+        # data.add_argument("idcard_name", type=str)
+        # data.add_argument("idcard_num", type=str)
+        # data.add_argument("business_address", type=str)
+        # data.add_argument("business_name", type=str)
+        # data.add_argument("business_begin_time", type=str)
+        # data.add_argument("business_end_time", type=str)
+        # data.add_argument("business_num", type=str)
+        # data.add_argument("service_image_name", type=str)
+        # data.add_argument("service_address", type=str)
+        # data.add_argument("service_name", type=str)
+        # data.add_argument("service_begin_time", type=str)
+        # data.add_argument("service_end_time", type=str)
+        # data.add_argument("service_num", type=str)
+        #
+        # business_begin_time = data.parse_args()["business_begin_time"]
+        # business_end_time = data.parse_args()["business_end_time"]
+        # service_begin_time = data.parse_args()["service_begin_time"]
+        # service_end_time = data.parse_args()["service_end_time"]
+        #
+        # # 格式化时间
+        # if business_begin_time and business_end_time and service_begin_time and service_end_time:
+        #     try:
+        #         business_begin_time = datetime.strftime(business_begin_time, "%Y-%m-%d")
+        #         business_end_time = datetime.strftime(business_end_time, "%Y-%m-%d")
+        #         service_begin_time = datetime.strftime(service_begin_time, "%Y-%m-%d")
+        #         service_end_time = datetime.strftime(service_end_time, "%Y-%m-%d")
+        #     except ValueError as e:
+        #         print(e.__repr__())
+        #         return general_response(err_code=705, status_code=400)
+        # else:
+        #     return general_response(err_code=101)
+        #
         pass
 
     @login_required_shop()

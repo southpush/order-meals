@@ -104,24 +104,48 @@ class shop_license(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     idcard_name = db.Column(db.String(30), nullable=True)
     idcard_num = db.Column(db.String(18), nullable=True, unique=True)
-    idcard_img = db.Column(db.LargeBinary, nullable=True)
-    business_img = db.Column(db.LargeBinary, nullable=True)
+    idcard_image_name = db.Column(db.String(100), nullable=True)
+    business_image_name = db.Column(db.String(100), nullable=True)
     business_address = db.Column(db.String(100), nullable=True)
     business_name = db.Column(db.String(40), nullable=True)
     business_begin_time = db.Column(db.DateTime, default=datetime.now)
     business_end_time = db.Column(db.DateTime, nullable=True)
     business_num = db.Column(db.String(18), nullable=True, unique=True)
-    service_img = db.Column(db.LargeBinary, nullable=True)
+    service_image_name = db.Column(db.String(100), nullable=True)
     service_address = db.Column(db.String(100), nullable=True)
     service_name = db.Column(db.String(40), nullable=True)
     service_begin_time = db.Column(db.DateTime, nullable=True)
     service_end_time = db.Column(db.DateTime, nullable=True)
     service_num = db.Column(db.String(18), nullable=True, unique=True)
-    status = db.Column(db.Integer, nullable=True)
+    status = db.Column(db.Integer, nullable=False, default=10)
     add_time = db.Column(db.DateTime, default=datetime.now)
 
     # 外键
     shop_id = db.Column(db.Integer, db.ForeignKey("shop_info.id", ondelete="CASCADE"), unique=True, nullable=False)
+
+    # 获取许可表的信息
+    def get_license_dict(self):
+        info = {
+            "idcard_name": self.idcard_name,
+            "idcard_num": self.idcard_num,
+            "idcard_image_name": self.idcard_image_name,
+            "business_image_name": self.business_image_name,
+            "business_address": self.business_address,
+            "business_name": self.business_name,
+            # 开始时间和结束时间只到年月日
+            "business_begin_time": self.business_begin_time,
+            "business_end_time": self.business_end_time,
+            "business_num": self.business_num,
+            "service_image_name": self.service_image_name,
+            "service_address": self.service_address,
+            "service_name": self.service_name,
+            "service_begin_time": self.service_begin_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "service_end_time": self.service_end_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "service_num": self.service_num,
+            "status": self.status,
+            "add_time": self.add_time.strftime("%Y-%m-%d %H:%M:%S")
+        }
+        return info
 
     def __repr__(self):
         return "<shop_license %r>" % self.id

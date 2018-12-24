@@ -45,6 +45,9 @@ class receipted_address(Resource):
         contact_phone = data.parse_args()["contact_phone"]
         receiver = data.parse_args()["receiver"]
 
+        if not (province_id and city_id and area_id and detailed and contact_phone and receiver):
+            return general_response(err_code=101, status_code=400)
+
         a = address(province=province_id, city=city_id,
                     area=area_id, detailed=detailed, user_id=user.id,
                     receiver=receiver, contact_phone=contact_phone)

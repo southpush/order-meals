@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from io import BytesIO
 
 import requests
@@ -17,6 +18,7 @@ from app.main.auth import get_openid, login_required_personal
 
 # 用户进入小程序先登录，小程序传入code
 from app.api_1_0.response import general_response
+from app.models.shop import shop_license
 from app.models.user import user_personal
 
 
@@ -108,7 +110,14 @@ class user_info(Resource):
 
 class getTest(Resource):
     def get(self):
-        return general_response(err_code=101, status_code=400)
+        data = reqparse.RequestParser()
+        data.add_argument("time", type=str)
+        time = data.parse_args()["time"]
+        a = datetime.strptime(time, "%Y-%m-%d")
+        print(a)
+        b = shop_license(business_begin_time=a, shop_id=1)
+        add_in_db(b)
+        return general_response()
 
 
 class getTest2(Resource):
