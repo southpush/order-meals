@@ -187,3 +187,129 @@ class shop_item_image(Resource):
         return general_response({"success": item.item_image_name})
 
 
+class shop_license_idcard_image(Resource):
+    def get(self, image_name):
+        try:
+            f = open("app/static/shop_license_idcard/" + image_name, "rb")
+            file = f.read()
+            resp = Response(file, mimetype="image/jpeg")
+            return resp
+        except FileNotFoundError as e:
+            print(e.__repr__())
+            return general_response(err_code=409, status_code=404)
+        except TypeError as e:
+            print(e.__repr__())
+            return general_response(err_code=702, status_code=400)
+
+    @login_required_shop()
+    def post(self, user):
+        license = user.shop.license
+        if not license:
+            return general_response(err_code=708)
+        path = "app/static/shop_license_idcard/"
+        file = request.files.get("file")
+        if not file:
+            return general_response(err_code=101, status_code=400)
+        if file.filename.split(".")[-1] not in ["jpg", "jpeg", "png"]:
+            return general_response(err_code=108, status_code=400)
+        file.seek(0, 2)
+        if file.tell() > 1048576*3:
+            return general_response(err_code=107, status_code=403)
+        file.seek(0)
+        if license.idcard_image_name:
+            try:
+                os.remove(path + license.idcard_image_name)
+            except FileNotFoundError as e:
+                print(e.__repr__())
+
+        filename = str(user.id) + file.filename
+        file.save(path+filename)
+        license.idcard_image_name = filename
+        update_in_db(license)
+        return general_response({"license_idcard_image_name": license.idcard_image_name})
+
+
+class shop_license_business_image(Resource):
+    def get(self, image_name):
+        try:
+            f = open("app/static/shop_license_business/" + image_name, "rb")
+            file = f.read()
+            resp = Response(file, mimetype="image/jpeg")
+            return resp
+        except FileNotFoundError as e:
+            print(e.__repr__())
+            return general_response(err_code=409, status_code=404)
+        except TypeError as e:
+            print(e.__repr__())
+            return general_response(err_code=702, status_code=400)
+
+    @login_required_shop()
+    def post(self, user):
+        license = user.shop.license
+        if not license:
+            return general_response(err_code=708)
+        path = "app/static/shop_license_business/"
+        file = request.files.get("file")
+        if not file:
+            return general_response(err_code=101, status_code=400)
+        if file.filename.split(".")[-1] not in ["jpg", "jpeg", "png"]:
+            return general_response(err_code=108, status_code=400)
+        file.seek(0, 2)
+        if file.tell() > 1048576*3:
+            return general_response(err_code=107, status_code=403)
+        file.seek(0)
+        if license.business_image_name:
+            try:
+                os.remove(path + license.business_image_name)
+            except FileNotFoundError as e:
+                print(e.__repr__())
+
+        filename = str(user.id) + file.filename
+        file.save(path+filename)
+        license.business_image_name = filename
+        update_in_db(license)
+        return general_response({"license_business_image_name": license.business_image_name})
+
+
+class shop_license_service_image(Resource):
+    def get(self, image_name):
+        try:
+            f = open("app/static/shop_license_service/" + image_name, "rb")
+            file = f.read()
+            resp = Response(file, mimetype="image/jpeg")
+            return resp
+        except FileNotFoundError as e:
+            print(e.__repr__())
+            return general_response(err_code=409, status_code=404)
+        except TypeError as e:
+            print(e.__repr__())
+            return general_response(err_code=702, status_code=400)
+
+    @login_required_shop()
+    def post(self, user):
+        license = user.shop.license
+        if not license:
+            return general_response(err_code=708)
+        path = "app/static/shop_license_service/"
+        file = request.files.get("file")
+        if not file:
+            return general_response(err_code=101, status_code=400)
+        if file.filename.split(".")[-1] not in ["jpg", "jpeg", "png"]:
+            return general_response(err_code=108, status_code=400)
+        file.seek(0, 2)
+        if file.tell() > 1048576*3:
+            return general_response(err_code=107, status_code=403)
+        file.seek(0)
+        if license.service_image_name:
+            try:
+                os.remove(path + license.service_image_name)
+            except FileNotFoundError as e:
+                print(e.__repr__())
+
+        filename = str(user.id) + file.filename
+        file.save(path+filename)
+        license.service_image_name = filename
+        update_in_db(license)
+        return general_response({"license_service_image_name": license.service_image_name})
+
+

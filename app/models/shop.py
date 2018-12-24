@@ -102,21 +102,21 @@ class shop_info(db.Model):
 class shop_license(db.Model):
     __tablename__ = "shop_license"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    idcard_name = db.Column(db.String(30), nullable=True)
-    idcard_num = db.Column(db.String(18), nullable=True, unique=True)
+    idcard_name = db.Column(db.String(30), nullable=False)
+    idcard_num = db.Column(db.String(18), nullable=False, unique=True)
     idcard_image_name = db.Column(db.String(100), nullable=True)
     business_image_name = db.Column(db.String(100), nullable=True)
-    business_address = db.Column(db.String(100), nullable=True)
-    business_name = db.Column(db.String(40), nullable=True)
+    business_address = db.Column(db.String(100), nullable=False)
+    business_name = db.Column(db.String(40), nullable=False)
     business_begin_time = db.Column(db.DateTime, default=datetime.now)
-    business_end_time = db.Column(db.DateTime, nullable=True)
-    business_num = db.Column(db.String(18), nullable=True, unique=True)
+    business_end_time = db.Column(db.DateTime, nullable=False)
+    business_num = db.Column(db.String(18), nullable=False, unique=True)
     service_image_name = db.Column(db.String(100), nullable=True)
-    service_address = db.Column(db.String(100), nullable=True)
-    service_name = db.Column(db.String(40), nullable=True)
-    service_begin_time = db.Column(db.DateTime, nullable=True)
-    service_end_time = db.Column(db.DateTime, nullable=True)
-    service_num = db.Column(db.String(18), nullable=True, unique=True)
+    service_address = db.Column(db.String(100), nullable=False)
+    service_name = db.Column(db.String(40), nullable=False)
+    service_begin_time = db.Column(db.DateTime, nullable=False)
+    service_end_time = db.Column(db.DateTime, nullable=False)
+    service_num = db.Column(db.String(18), nullable=False, unique=True)
     status = db.Column(db.Integer, nullable=False, default=10)
     add_time = db.Column(db.DateTime, default=datetime.now)
 
@@ -133,8 +133,8 @@ class shop_license(db.Model):
             "business_address": self.business_address,
             "business_name": self.business_name,
             # 开始时间和结束时间只到年月日
-            "business_begin_time": self.business_begin_time,
-            "business_end_time": self.business_end_time,
+            "business_begin_time": self.business_begin_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "business_end_time": self.business_end_time.strftime("%Y-%m-%d %H:%M:%S"),
             "business_num": self.business_num,
             "service_image_name": self.service_image_name,
             "service_address": self.service_address,

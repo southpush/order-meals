@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from sqlalchemy.exc import IntegrityError
+
 from .. import db
 from ..models.user import user_personal, user_shop
 
@@ -62,4 +64,15 @@ def delete_in_db(what):
     except Exception as e:
         db.session.rollback()
         print(repr(e))
+        return False
+
+
+def add_in_db2(what):
+    try:
+        db.session.add(what)
+        db.session.commit()
+        return True
+    except IntegrityError as e:
+        db.session.rollback()
+        print(e.__repr__())
         return False

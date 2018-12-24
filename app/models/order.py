@@ -33,6 +33,22 @@ class orders(db.Model):
                                        lazy="select", cascade="all, delete-orphan", passive_deletes=True)
 
     def get_order_dict_personal(self):
+        if self.status == order_status.waiting_for_pay:
+            if (datetime.now() - self.create_time).days > 0 or (datetime.now() - self.create_time).seconds > 800:
+                self.status = order_status.shut_down_over_payment_time
+                db.session.commit()
+        elif self.status == order_status.waiting_for_receive:
+            if (datetime.now() - self.pay_time).days > 0 or (datetime.now() - self.pay_time).seconds > 3600:
+                self.status = order_status.shut_down_shop_no_receive
+                db.session.commit()
+        elif self.status == order_status.waiting_for_delivery:
+            if (datetime.now() - self.pay_time).days > 0 or (datetime.now() - self.pay_time).seconds > 7200:
+                self.status = order_status.arrived
+                db.session.commit()
+        elif self.status == order_status.arrived:
+            if (datetime.now() - self.pay_time).days > 2:
+                self.status = order_status.completed
+                db.session.commit()
         items_list = []
         for i in self.items.all():
             items_list.append(i.get_item_dict())
@@ -59,8 +75,20 @@ class orders(db.Model):
             if (datetime.now() - self.create_time).days > 0 or (datetime.now() - self.create_time).seconds > 800:
                 self.status = order_status.shut_down_over_payment_time
                 db.session.commit()
+        elif self.status == order_status.waiting_for_receive:
+            if (datetime.now() - self.pay_time).days > 0 or (datetime.now() - self.pay_time).seconds > 3600:
+                self.status = order_status.shut_down_shop_no_receive
+                db.session.commit()
+        elif self.status == order_status.waiting_for_delivery:
+            if (datetime.now() - self.pay_time).days > 0 or (datetime.now() - self.pay_time).seconds > 7200:
+                self.status = order_status.arrived
+                db.session.commit()
+        elif self.status == order_status.arrived:
+            if (datetime.now() - self.pay_time).days > 2:
+                self.status = order_status.completed
+                db.session.commit()
         # elif self.status == order_status.w
-        db.session.commit()
+        # db.session.commit()
         info = {
             "create_time": self.create_time,
             "total_price": self.total_price,
@@ -104,10 +132,6 @@ class orders(db.Model):
     @property
     def status_info(self):
         return order_status.status_dict[int(self.status)]
-
-    # @property
-    # def status(self):
-    #     if self.status == 20 and (datetime.now() - self.pay_time)
 
 
 class order_items(db.Model):

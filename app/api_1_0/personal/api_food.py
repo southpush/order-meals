@@ -2,7 +2,6 @@
 import json
 from datetime import datetime
 
-from flask import make_response
 from flask_restful import Resource, reqparse
 
 from app.api_1_0.response import general_response
@@ -19,6 +18,12 @@ from app.models.shop import shop_items, item_specification, shop_info
 
 class nearby_shop(Resource):
     def get(self, lat, lng):
+        try:
+            float(lat)
+            float(lng)
+        except ValueError as e:
+            print(e.__repr__())
+            return general_response(err_code=706)
         a = get_delivery_shop(lat=lat, lng=lng)
         info = []
         for i in a:

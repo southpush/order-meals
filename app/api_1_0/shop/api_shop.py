@@ -3,14 +3,16 @@ import json
 from datetime import datetime
 
 import requests
+from pymysql import IntegrityError
+
 from app import glovar
 from app.api_1_0.response import general_response
-from app.db.user_db import add_in_db, update_in_db, delete_in_db
+from app.db.user_db import add_in_db, update_in_db, delete_in_db, add_in_db2
 from app.main.auth import login_required_shop
 from flask_restful import Resource, reqparse
 
 from app.models.order import orders, order_status
-from app.models.shop import shop_info, item_specification, item_category, shop_items
+from app.models.shop import shop_info, item_specification, item_category, shop_items, shop_license
 
 
 class shop_info_application(Resource):
@@ -135,48 +137,121 @@ class shop_license_application(Resource):
 
     @login_required_shop()
     def post(self, user):
-        # data = reqparse.RequestParser()
-        # data.add_argument("idcard_name", type=str)
-        # data.add_argument("idcard_num", type=str)
-        # data.add_argument("business_address", type=str)
-        # data.add_argument("business_name", type=str)
-        # data.add_argument("business_begin_time", type=str)
-        # data.add_argument("business_end_time", type=str)
-        # data.add_argument("business_num", type=str)
-        # data.add_argument("service_image_name", type=str)
-        # data.add_argument("service_address", type=str)
-        # data.add_argument("service_name", type=str)
-        # data.add_argument("service_begin_time", type=str)
-        # data.add_argument("service_end_time", type=str)
-        # data.add_argument("service_num", type=str)
-        #
-        # business_begin_time = data.parse_args()["business_begin_time"]
-        # business_end_time = data.parse_args()["business_end_time"]
-        # service_begin_time = data.parse_args()["service_begin_time"]
-        # service_end_time = data.parse_args()["service_end_time"]
-        #
-        # # 格式化时间
-        # if business_begin_time and business_end_time and service_begin_time and service_end_time:
-        #     try:
-        #         business_begin_time = datetime.strftime(business_begin_time, "%Y-%m-%d")
-        #         business_end_time = datetime.strftime(business_end_time, "%Y-%m-%d")
-        #         service_begin_time = datetime.strftime(service_begin_time, "%Y-%m-%d")
-        #         service_end_time = datetime.strftime(service_end_time, "%Y-%m-%d")
-        #     except ValueError as e:
-        #         print(e.__repr__())
-        #         return general_response(err_code=705, status_code=400)
-        # else:
-        #     return general_response(err_code=101)
-        #
-        pass
+        if user.shop.license:
+            return general_response(err_code=707, status_code=400)
+        data = reqparse.RequestParser()
+        data.add_argument("idcard_name", type=str)
+        data.add_argument("idcard_num", type=str)
+        data.add_argument("business_address", type=str)
+        data.add_argument("business_name", type=str)
+        data.add_argument("business_begin_time", type=str)
+        data.add_argument("business_end_time", type=str)
+        data.add_argument("business_num", type=str)
+        data.add_argument("service_image_name", type=str)
+        data.add_argument("service_address", type=str)
+        data.add_argument("service_name", type=str)
+        data.add_argument("service_begin_time", type=str)
+        data.add_argument("service_end_time", type=str)
+        data.add_argument("service_num", type=str)
+
+        business_begin_time = data.parse_args()["business_begin_time"]
+        business_end_time = data.parse_args()["business_end_time"]
+        service_begin_time = data.parse_args()["service_begin_time"]
+        service_end_time = data.parse_args()["service_end_time"]
+
+        idcard_name = data.parse_args()["idcard_name"]
+        idcard_num = data.parse_args()["idcard_num"]
+        business_address = data.parse_args()["business_address"]
+        business_name = data.parse_args()["business_name"]
+        business_num = data.parse_args()["business_num"]
+        service_address = data.parse_args()["service_address"]
+        service_name = data.parse_args()["service_name"]
+        service_num = data.parse_args()["service_num"]
+
+        # 格式化时间
+        if business_begin_time and business_end_time and service_begin_time and service_end_time:
+            try:
+                business_begin_time = datetime.strptime(business_begin_time, "%Y-%m-%d")
+                business_end_time = datetime.strptime(business_end_time, "%Y-%m-%d")
+                service_begin_time = datetime.strptime(service_begin_time, "%Y-%m-%d")
+                service_end_time = datetime.strptime(service_end_time, "%Y-%m-%d")
+            except ValueError as e:
+                print(e.__repr__())
+                return general_response(err_code=705, status_code=400)
+        else:
+            return general_response(err_code=101)
+        license = shop_license(idcard_num=idcard_num, idcard_name=idcard_name, business_address=business_address,
+                               business_name=business_name, business_num=business_num, service_address=service_address,
+                               service_begin_time=service_begin_time, service_end_time=service_end_time,
+                               business_begin_time=business_begin_time, business_end_time=business_end_time,
+                               service_name=service_name, service_num=service_num, shop_id=user.shop.id)
+        if add_in_db2(license):
+            return general_response()
+        else:
+            return general_response(err_code=101)
 
     @login_required_shop()
     def put(self, user):
-        pass
+        if not user.shop.license:
+            return general_response(err_code=708, status_code=404)
+        data = reqparse.RequestParser()
+        data.add_argument("idcard_name", type=str)
+        data.add_argument("idcard_num", type=str)
+        data.add_argument("business_address", type=str)
+        data.add_argument("business_name", type=str)
+        data.add_argument("business_begin_time", type=str)
+        data.add_argument("business_end_time", type=str)
+        data.add_argument("business_num", type=str)
+        data.add_argument("service_image_name", type=str)
+        data.add_argument("service_address", type=str)
+        data.add_argument("service_name", type=str)
+        data.add_argument("service_begin_time", type=str)
+        data.add_argument("service_end_time", type=str)
+        data.add_argument("service_num", type=str)
 
-    @login_required_shop()
-    def delete(self, user):
-        pass
+        business_begin_time = data.parse_args()["business_begin_time"]
+        business_end_time = data.parse_args()["business_end_time"]
+        service_begin_time = data.parse_args()["service_begin_time"]
+        service_end_time = data.parse_args()["service_end_time"]
+
+        idcard_name = data.parse_args()["idcard_name"]
+        idcard_num = data.parse_args()["idcard_num"]
+        business_address = data.parse_args()["business_address"]
+        business_name = data.parse_args()["business_name"]
+        business_num = data.parse_args()["business_num"]
+        service_address = data.parse_args()["service_address"]
+        service_name = data.parse_args()["service_name"]
+        service_num = data.parse_args()["service_num"]
+
+        # 格式化时间
+        if business_begin_time and business_end_time and service_begin_time and service_end_time:
+            try:
+                business_begin_time = datetime.strptime(business_begin_time, "%Y-%m-%d")
+                business_end_time = datetime.strptime(business_end_time, "%Y-%m-%d")
+                service_begin_time = datetime.strptime(service_begin_time, "%Y-%m-%d")
+                service_end_time = datetime.strptime(service_end_time, "%Y-%m-%d")
+            except ValueError as e:
+                print(e.__repr__())
+                return general_response(err_code=705, status_code=400)
+        else:
+            return general_response(err_code=101)
+        license = user.shop.license
+        license.idcard_name = idcard_name
+        license.idcard_num = idcard_num
+        license.business_address = business_address
+        license.business_name = business_name
+        license.business_num = business_num
+        license.service_address = service_address
+        license.service_name = service_name
+        license.service_num = service_num
+        license.business_begin_time = business_begin_time
+        license.business_end_time = business_end_time
+        license.service_begin_time = service_begin_time
+        license.service_end_time = service_end_time
+        if update_in_db(license):
+            return general_response()
+        else:
+            return general_response(err_code=101)
 
 
 class working_shop_info(Resource):
