@@ -1,17 +1,16 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # @Time    : 2018/12/10 11:39
 # @Author  : Min
 # @Version : 1.0
 from flask_restful import Resource
 from flask import request
-from app import db
 from app.models.shop import shop_info, ctd_shop_order
 from app.models.order import orders, ctd_orders, charge_back_info, ctd_charge_back, order_status
 from app.utils.response import general_response
 from app.utils.login import permission_required
 from app.models.role import Permission
 from flask_login import login_required
+from app.db.user_db import update_in_db
 
 
 # 根据订单时间分页查询订单信息
@@ -41,7 +40,8 @@ class OrderGet(Resource):
                 else:
                     start_time = starttime
                     end_time = endtime
-                Orders = orders.query.filter_by(shop_id=i.id).filter(orders.pay_time.between(start_time, str(end_time)+" 23:59:59")).all()
+                Orders = orders.query.filter_by(shop_id=i.id).filter(
+                    orders.pay_time.between(start_time, str(end_time) + " 23:59:59")).all()
 
                 l.append(ctd_shop_order(i, Orders))
             return general_response(info={'lists': l, "total_page": total_page})
@@ -54,7 +54,7 @@ class OrderUserGet(Resource):
     @permission_required([Permission.USERADMIN, Permission.ADMINISTER])
     def get(self):
         user_id = request.args.get('id')
-        list = db.session.query(orders).filter_by(user_id=user_id).all()
+        list = orders.query.filter_by(user_id=user_id).all()
         l = []
         if len(list) == 0:
             return general_response(err_code=1009)
@@ -72,7 +72,7 @@ class OrderShopGet(Resource):
     @permission_required([Permission.SHOPERADMIN, Permission.ADMINISTER])
     def get(self):
         shop_id = request.args.get('id')
-        list = db.session.query(orders).filter_by(shop_id=shop_id).all()
+        list = orders.query.filter_by(shop_id=shop_id).all()
         l = []
         if len(list) == 0:
             return general_response(err_code=1009)
@@ -90,7 +90,8 @@ class OrderBackGet(Resource):
     @permission_required([Permission.SHOPERADMIN, Permission.ADMINISTER])
     def get(self):
         page = int(request.args.get('page'))
-        pag = orders.query.filter_by(status=order_status.shop_refuse).order_by(orders.id.asc()).paginate(page=page, per_page=1)
+        pag = orders.query.filter_by(status=order_status.shop_refuse).order_by(orders.id.asc()).paginate(page=page,
+                                                                                                         per_page=1)
         lists = pag.items
         total_page = pag.pages
         if total_page == 0:
@@ -124,17 +125,20 @@ class ChargeBackPass(Resource):
         order_id = request.args.get('id')
         reason = request.args.get('reason')
         print(order_id)
-        Orders =orders.query.filter_by(id=order_id).first()
+        Orders = orders.query.filter_by(id=order_id).first()
         print(Orders)
         if Orders.status == order_status.shop_refuse:
             status = order_status.shut_down_return_to_personal
             try:
-                db.session.query(orders).filter_by(id=order_id).update({'status': status})
-                db.session.query(charge_back_info).filter_by(order_id=order_id).update({'admin_reason': reason})
-                db.session.commit()
+                w1 = orders.query.filter_by(id=order_id)
+                w1.update({'status': status})
+                w2 = charge_back_info.query.filter_by(order_id=order_id)
+                w2.update({'admin_reason': reason})
+                update_in_db(w1)
+                update_in_db(w2)
                 print('success')
             except Exception as e:
-                db.session.rollback()
+                # db.session.rollback()
                 print('failed')
                 print(e)
 
@@ -150,16 +154,19 @@ class ChargeBackNotPass(Resource):
     def post(self):
         order_id = request.args.get('id')
         reason = request.args.get('reason')
-        Orders =orders.query.filter_by(id=order_id).first()
+        Orders = orders.query.filter_by(id=order_id).first()
         if Orders.status == order_status.shop_refuse:
             status = order_status.shut_down_return_to_shop
             try:
-                db.session.query(orders).filter_by(id=order_id).update({'status': status})
-                db.session.query(charge_back_info).filter_by(order_id=order_id).update({'admin_reason': reason})
-                db.session.commit()
+                w1 = orders.query.filter_by(id=order_id)
+                w1.update({'status': status})
+                w2 = charge_back_info.query.filter_by(order_id=order_id)
+                w2.update({'admin_reason': reason})
+                update_in_db(w1)
+                update_in_db(w2)
                 print('success')
             except Exception as e:
-                db.session.rollback()
+                # db.session.rollback()
                 print('failed')
                 print(e)
 
@@ -181,7 +188,7 @@ class CountGet(Resource):
         if startime == '' and endtime == '':
             pag = orders.query.filter().paginate(page=page, per_page=1)
         else:
-            pag = orders.query.filter(orders.pay_time.between(startime,endtime)).paginate(page=page, per_page=1)
+            pag = orders.query.filter(orders.pay_time.between(startime, endtime)).paginate(page=page, per_page=1)
         lists = pag.items
         total_page = pag.pages
 

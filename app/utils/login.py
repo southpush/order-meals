@@ -24,7 +24,7 @@ def permission_required(permissions):
                     count += 1
             # count为零返回403
             if count == 0:
-                return general_response(err_code=403)
+                return general_response(err_code=2003)
             return f(*args, **kwargs)
 
         return decorated_function

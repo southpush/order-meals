@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # @Time    : 2018/12/14 17:53
 # @Author  : Min
@@ -10,7 +9,7 @@ from sqlalchemy import and_
 from app.utils.response import general_response
 from app.utils.login import permission_required
 from app.models.role import Permission
-from flask_login import login_required, current_user
+from flask_login import login_required
 
 
 # 查询商家用户信息

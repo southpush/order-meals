@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # @Time    : 2018/12/7 10:50
 # @Author  : Min
@@ -8,7 +7,6 @@ from flask_restful import Resource
 from flask import request
 from app.models.user import user_personal,ctd
 from sqlalchemy import and_
-from app import db
 from app.utils.response import general_response
 from app.utils.login import permission_required
 from flask_login import login_required
@@ -68,7 +66,7 @@ class DeleteUser(Resource):
     def post(self):
         id = request.args.get('id')
         try:
-            db.session.query(user_personal).filter_by(id=id).delete()
+            user_personal.query.filter_by(id=id).delete()
             return general_response(info={'result': 'login success'})
         except Exception as e:
             print(repr(e))

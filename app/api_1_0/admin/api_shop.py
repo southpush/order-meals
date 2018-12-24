@@ -1,11 +1,9 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # @Time    : 2018/12/7 11:12
 # @Author  : Min
 # @Version : 1.0
 from flask_restful import Resource
 from flask import request
-from app import db
 from app.models.shop import shop_info, shop_license, Status, ctd_shop
 from app.models.user import user_shop
 from app.utils.response import general_response
@@ -13,6 +11,7 @@ from sqlalchemy import and_
 from app.utils.login import permission_required
 from app.models.role import Permission
 from flask_login import login_required
+from app.db.user_db import update_in_db
 
 
 # 商铺信息获取
@@ -23,7 +22,7 @@ class ShopInfoGet(Resource):
     def get(self):
         owner_id = request.args.get('id')
         print(owner_id)
-        list = db.session.query(shop_info).filter_by(owner_id=owner_id).all()
+        list = shop_info.query.filter_by(owner_id=owner_id).all()
         # 为空返回1006
         if len(list) == 0:
             return general_response(err_code=1006)
@@ -49,11 +48,12 @@ class ShopPass(Resource):
             status = Status.EXAMINE_PASS
             try:
                 # 修改对应状态信息
-                db.session.query(shop_info).filter_by(id=id).update({'status': status})
-                db.session.commit()
+                what = shop_info.query.filter_by(id=id)
+                what.update({'status': status})
+                update_in_db(what)
                 print('success')
             except Exception as e:
-                db.session.rollback()
+                # db.session.rollback()
                 print('failed')
                 print(e)
         result = ctd_shop(Shop_info)
@@ -73,11 +73,11 @@ class ShopNotPass(Resource):
             status = Status.EXAMINE_NOT_PASS
             try:
                 # 修改对应状态
-                db.session.query(shop_info).filter_by(id=id).update({'status': status})
-                db.session.commit()
-                print('success')
+                what = shop_info.query.filter_by(id=id)
+                what.update({'status': status})
+                update_in_db(what)
             except Exception as e:
-                db.session.rollback()
+                # db.session.rollback()
                 print('failed')
                 print(e)
         result = shop_info.get_shop_info(Shop_info)
@@ -96,11 +96,12 @@ class ShopInPass(Resource):
         if Shop_info.status == Status.EXAMINE_PASS and Shop_license.status == Status.LICENSE_PASS:
             status = Status.PASS
             try:
-                db.session.query(shop_info).filter_by(id=id).update({'status': status})
-                db.session.commit()
+                what = shop_info.query.filter_by(id=id)
+                what.update({'status': status})
+                update_in_db(what)
                 print('success')
             except Exception as e:
-                db.session.rollback()
+                # db.session.rollback()
                 print('failed')
                 print(e)
         result = ctd_shop(Shop_info)

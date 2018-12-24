@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from flask import request, make_response, Response
-from flask_restful import Resource, reqparse
+from flask import request, Response
+from flask_restful import Resource
 
 from app.utils.response import general_response
 from app.db.admin_db import add_admin,get_img
@@ -31,6 +31,4 @@ class img(Resource):
         if add_admin(img):
             return general_response(info={"img_id": img.id})
         return general_response(err_code=105, status_code=400)
-
-
 

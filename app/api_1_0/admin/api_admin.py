@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # @Time    : 2018/12/5 10:43
 # @Author  : Min
@@ -6,13 +5,13 @@
 from flask_restful import Resource, reqparse
 from flask import request, session
 from app.utils.sms import send_sms, verification_code
-from app import db
 from app.models.admin import Admin, ctd, get_md5
 from flask_login import login_user, current_user, logout_user, login_required
 from app.utils.response import general_response
 from app.models.role import Permission
 from app.utils.login import permission_required
 import re
+from app.db.user_db import update_in_db, add_in_db
 
 parser = reqparse.RequestParser()
 
@@ -28,7 +27,7 @@ class AdminLogin(Resource):
             return general_response(err_code=1001)
 
         # 判断数据库中是否有该手机号码
-        list = db.session.query(Admin).filter_by(admin_phone=phone).all()
+        list = Admin.query.filter_by(admin_phone=phone).all()
         # 为空返回101错误
         if len(list) == 0:
             return general_response(err_code=101)
@@ -70,7 +69,7 @@ class AdminRegister(Resource):
             return general_response(err_code=1003)
 
         # 判断数据库中是否有该手机号码
-        list = db.session.query(Admin).filter_by(admin_phone=phone).all()
+        list = Admin.query.filter_by(admin_phone=phone).all()
         # 为空返回103错误
         if len(list) != 0:
             return general_response(err_code=103)
@@ -92,14 +91,14 @@ class AdminRegister(Resource):
                           adminpass=adminpass,
                           admin_phone=phone)
             # 添加一个新的Admin
-            db.session.add(admin)
+            # db.session.add(admin)
             login_user(admin)
             try:
-                db.session.commit()
+                add_in_db(admin)
                 print("注册成功")
                 return general_response(info={"name": current_user.name})
             except Exception as e:
-                db.session.rollback()
+                # db.session.rollback()
                 print('注册失败')
                 print(repr(e))
 
@@ -114,7 +113,7 @@ class GetCode(Resource):
             return general_response(err_code=1001)
         else:
             # 判断数据库中是否有该手机号码
-            list = db.session.query(Admin).filter_by(admin_phone=phone).all()
+            list = Admin.query.filter_by(admin_phone=phone).all()
             # 为空返回103错误
             if len(list) != 0:
                 return general_response(err_code=103)
@@ -183,11 +182,13 @@ class AdminEditPassword(Resource):
                     try:
                         # print(admin_slat)
                         # 修改数据库对应列加密密码字段
-                        db.session.query(Admin).filter_by(name=current_user.name).update({'admin_slat': admin_slat})
-                        db.session.commit()
+                        what = Admin.query.filter_by(name=current_user.name)
+                        # db.session.query(Admin).filter_by(name=current_user.name).update({'admin_slat': admin_slat})
+                        what.update({'admin_slat': admin_slat})
+                        update_in_db(what)
                         return general_response(info={'result': 'success'})
                     except Exception as e:
-                        db.session.rollback()
+                        # db.session.rollback()
                         print('failed')
                         print(e)
             except Exception as e:
@@ -203,10 +204,12 @@ class AdminEdit(Resource):
         phone = request.args.get('phone')
         try:
             # print(db.session.query(Admin))
-            db.session.query(Admin).filter_by(name=current_user.name).update({'name': name, 'admin_phone':phone})
-            db.session.commit()
+            what = Admin.query.filter_by(name=current_user.name)
+            what.update({'name': name, 'admin_phone':phone})
+            update_in_db(what)
             print('success')
         except Exception as e:
-            db.session.rollback()
+            # db.session.rollback()
             print('failed')
             print(e)
+
