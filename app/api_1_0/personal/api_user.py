@@ -110,14 +110,8 @@ class user_info(Resource):
 
 class getTest(Resource):
     def get(self):
-        data = reqparse.RequestParser()
-        data.add_argument("time", type=str)
-        time = data.parse_args()["time"]
-        a = datetime.strptime(time, "%Y-%m-%d")
-        print(a)
-        b = shop_license(business_begin_time=a, shop_id=1)
-        add_in_db(b)
-        return general_response()
+
+        return general_response(err_code=2003)
 
 
 class getTest2(Resource):

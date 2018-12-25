@@ -5,7 +5,8 @@
 # @Version : 1.0
 from functools import wraps
 from flask_login import current_user
-from ..utils.response import general_response
+
+from app.api_1_0.response import general_response
 from app.models.admin import Permission
 
 
