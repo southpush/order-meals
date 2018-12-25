@@ -161,7 +161,7 @@ class receipted_address_list(Resource):
                     "receiver": a.receiver,
                     "address_id": a.id
                 })
-            return general_response(info=info)
+            return general_response(info={"address_list": info})
         else:
             return general_response(err_code=403, status_code=404)
 

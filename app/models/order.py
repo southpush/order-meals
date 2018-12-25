@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 
+from app.models.user import user_personal, user_shop
 from .. import db
 
 
@@ -183,18 +184,28 @@ class charge_back_info(db.Model):
 
 
 class order_status:
+    # 等待支付
     waiting_for_pay = 10
+    # 支付完了等待商家接单
     waiting_for_receive = 11
+    # 等待送达
     waiting_for_delivery = 20
-    # 订单到达
+    # 订单送达
     arrived = 30
+    # 个人用户取消订单
     personal_cancel = 40
+    # 商铺拒绝个人用户取消订单
     shop_refuse = 41
     # 5开头的状态都算在订单关闭里了
+    # 个人用户还没有付款，关闭订单
     shut_down_no_pay = 50
+    # 把钱退给个人用户
     shut_down_return_to_personal = 51
+    # 把钱退给商家
     shut_down_return_to_shop = 52
+    # 超过付款时间还没付款，订单关闭
     shut_down_over_payment_time = 53
+    # 商家不接单，订单关闭
     shut_down_shop_no_receive = 54
     # 订单正常完成的
     completed = 60

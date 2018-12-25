@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import jsonify, Response, render_template
 
+from app.db.user_db import update_in_db
 from . import main
 
 from flask import render_template, redirect, url_for, session
@@ -56,14 +57,16 @@ def edit():
                     print(form.newpass.data)
 
                     # print(db.session.query(Admin))
+                    what = Admin.query.filter_by(name=current_user.name)
                     db.session.query(Admin).filter_by(name=current_user.name).update({'admin_slat': newpass})
+                    what.update({'admin_slat': newpass})
 
 
-                    db.session.commit()
+                    update_in_db(what)
                     print('success')
                     return redirect(url_for("main.index"))
                 except Exception as e:
-                    db.session.rollback()
+                    # db.session.rollback()
                     print('failed')
                     print(e)
         return render_template("edit.html", form = form)
