@@ -75,7 +75,7 @@ class OrderShopGet(Resource):
         list = orders.query.filter_by(shop_id=shop_id).all()
         l = []
         if len(list) == 0:
-            return general_response(err_code=1009)
+            return general_response(err_code=1010)
         else:
             for i in list:
                 l.append(ctd_orders(i))
