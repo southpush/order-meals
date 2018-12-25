@@ -20,7 +20,8 @@ def general_response(info=None, err_code=None, status_code=200, token=None):
     if not info and not err_code and not token:
         rst = make_response(jsonify({"code:": 0, "message": "Success."}), 200)
 
-    rst.headers["Access-Control-Allow-Origin"] = "*"
+    rst.headers["Access-Control-Allow-Origin"] = "http://127.0.0.1:8020"
+    rst.headers["Access-Control-Allow-Credentials"] = "true"
     return rst
 
 

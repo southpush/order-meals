@@ -118,7 +118,7 @@ class ShopGet(Resource):
         phone = request.args.get('phone')
         page = int(request.args.get('page'))
         # 根据手机号码查询对应商家信息
-        list =user_shop.query.filter(user_shop.phone.like("%" + phone + "%") if phone is not None else"").all()
+        list = user_shop.query.filter(user_shop.phone.like("%" + phone + "%") if phone is not None else"").all()
         owner_id = []
         if list is None:
             owner_id = ''

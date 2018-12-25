@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>登陆注册</title>
+	<meta http-equiv="Access-Control-Allow-Origin" content="*">
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="../css/log.css">
+	<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/base.js" ></script>
+	<script src="../js/log.js"></script>
+	
+</head>
+<body>
+	<!-- chb图标 -->
+	<div class="img" >
+		<img class="titleImg" src ="../img/img.png"  >	
+	</div>
+
+	<!-- 登录  注册-->
+	<div class="log" id="login" >
+		<h2 class="ulog" onclick="showDiv()">登录</h2>
+		<h2 class="uregi" onclick="showReg()">注册</h2>
+	</div>
+	
+		
+	
+	
+	<!-- 登陆弹出框 -->
+	<div id="outer"></div>
+	<div id="logWin">
+		<div class="loghead">
+			<span class="logsign">登陆</span>
+			<span id="close" onclick="closeDiv()">&#10006</span>
+		</div>	
+		<div class="loginForm">
+			<table  class="logForm">
+				<label>
+					<input id="admin_phone" type="text"  placeholder="请输入手机号"  class="logInput" />
+				</label>
+				<label >
+					<input type="password" id="adminpass" placeholder="请输入密码"  class="logInput"/>
+				</label>
+				
+				<button class="loginBtn" onclick="adminLogin()">登陆</button>
+			</table>
+			<span id="register" onclick="Register()">没有账号，去注册>></span>
+		</div>
+	</div>
+
+	<!-- 注册弹出框 -->
+	<div id="logWin1">
+		<div class="loghead">
+			<span class="logsign">注册</span>
+			<span id="close1" onclick="closeDiv1()">&#10006</span>
+		</div>
+		<div class="loginForm">
+			<table  class="logForm">
+				<label >
+					<input id="phone" type="text" placeholder="请输入手机号"  class="logInput" />
+					<input id="v_code" type="text" placeholder="验证码"  class="checkInput" />
+					<button id="" class="check" onclick="sendSms()" >获取手机验证码</button>
+				</label>
+				<label >
+					<input id="admin_pass" type="password" placeholder="请输入密码"  class="logInput"/>
+				</label>
+				<label >
+					<select id="roleid" class="RegSelect">
+						<option   value="" disabled selected>请选择角色</option>
+						<option   value="2">商铺管理员</option>
+						<option   value="3">用户管理员</option>
+						<option   value="4">超级管理员</option>
+					</select>  
+				</label>
+				<!-- <label for="">
+					<input id="adminpass" type="password" placeholder="确认密码"  class="logInput"/>
+				</label> -->
+				<button class="registerBtn" onclick="adminRegister()">注册</button>
+			</table>
+		</div>
+	</div>
+	
+	
+	
+</body>
+</html>

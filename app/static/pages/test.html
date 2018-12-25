@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="../js/jquery-1.9.1.min.js" ></script>
+		<script type="text/javascript" src="../js/bootstrap-paginator.js" ></script>
+		<script type="text/javascript" src="../js/bootstrap.js" ></script>
+		<link rel="stylesheet" href="../css/bootstrapv3.css" />		
+		<script type="text/javascript" src="../js/test.js" ></script>
+		
+	</head>
+	<body>
+		<script type="text/javascript">
+			 $(function(){
+			 	var tbody = document.getElementById('tbody-result');
+			 	$.ajax({
+			 		type:"get",
+			 		url:'http://127.0.0.1:5000/api_1_0/userGet?page=' + 1,
+			 		async:true,
+			 		dataType: 'json',
+			        success: function (data) {
+			        	var options={
+					    bootstrapMajorVersion:3, //版本
+					    currentPage:1, //当前页数
+					    numberOfPages:5, //最多显示Page页
+					    totalPages:data.total_page, //所有数据可以显示的页数
+					    itemTexts: function (type, page, current) {
+		                    switch (type) {
+		                        case "first": return "首页";
+		                        case "prev": return "上一页";
+		                        case "next": return "下一页";
+		                        case "last": return "末页";
+		                        case "page": return page;
+		                       }
+					    },
+					    onPageClicked: function (event, originalEvent, type, page) {
+		        			$.ajax({
+					            url: 'http://127.0.0.1:5000/api_1_0/userGet?page=' + page,
+					            type: 'get',
+					            dataType: 'json',
+					            success: function (data) {	
+									var str = ""
+									var list = data.lists;
+									for (var i = 0; i < list.length; i++) {
+									 	str += "<tr>" +  
+									 	"<td style='display: none'>" + list[i].id + "</td>" +  
+				                        "<td >" + list[i].openid + "</td>" +  
+				                        "<td>" + '<img src="img/用户.png" alt="" class="userHeadImg" />' + "</td>" +  
+				                        "<td>" + list[i].nickname + "</td>" +  
+				                        "<td>" + list[i].phone + "</td>" +  
+				                        "<td>" + list[i].address + "</td>" +
+				                        "<td>" + '<img src="img/删除.png" alt="" class="deleteImg" onclick="DeleteUser(this)"/> '+ "</td>" +
+				                        "</tr>"
+			
+									}
+									
+									//var total_page = data.total_page; //所有数据可以显示的页数
+									tbody.innerHTML = str;
+		            			}
+		        			});
+		       			},
+				    	}
+				    	
+						$('#example').bootstrapPaginator(options);
+			        }
+			 	});
+			
+		
+		})
+		</script>
+		<table>
+			<tbody id="tbody-result"></tbody>
+		</table>
+		<div id="">
+			<ul id="example"></ul>
+		</div>
+	</body>	
+</html>

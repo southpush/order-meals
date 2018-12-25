@@ -4,6 +4,7 @@ from datetime import datetime
 from sqlalchemy import Column
 
 from app.models.address import Region
+from app.models.user import user_shop
 from .. import db
 
 
