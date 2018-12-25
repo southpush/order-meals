@@ -236,6 +236,10 @@ class item_specification(db.Model):
 def ctd_shop(obj):
     User_shop = user_shop.query.filter_by(id=obj.owner_id).first()
     Shop_license = shop_license.query.filter_by(shop_id=obj.id).first()
+    if Shop_license is None:
+        license_id = ''
+    else:
+        license_id = Shop_license.id
     # Orders = orders.query.filter_by(shop_id=obj.id).all()
     return {
         "id": obj.id,
@@ -255,7 +259,7 @@ def ctd_shop(obj):
         "address_str": obj.get_address_str(),
         "phone": User_shop.phone,
         "name": User_shop.nickname,
-        "license_id": Shop_license.id,
+        "license_id": license_id,
 
     }
 
