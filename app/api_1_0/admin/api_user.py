@@ -7,7 +7,7 @@ from flask_restful import Resource
 from flask import request
 from app.models.user import user_personal,ctd
 from sqlalchemy import and_
-from app.utils.response import general_response
+from app.api_1_0.response import general_response
 from app.utils.login import permission_required
 from flask_login import login_required
 from app.models.role import Permission

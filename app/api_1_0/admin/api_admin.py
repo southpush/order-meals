@@ -7,7 +7,7 @@ from flask import request, session
 from app.utils.sms import send_sms, verification_code
 from app.models.admin import Admin, ctd, get_md5
 from flask_login import login_user, current_user, logout_user, login_required
-from app.utils.response import general_response
+from app.api_1_0.response import general_response
 from app.models.role import Permission
 from app.utils.login import permission_required
 import re

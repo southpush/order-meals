@@ -2,7 +2,7 @@
 from flask import request, Response
 from flask_restful import Resource
 
-from app.utils.response import general_response
+from app.api_1_0.response import general_response
 from app.db.admin_db import add_admin,get_img
 from app.models.admin import Admin
 

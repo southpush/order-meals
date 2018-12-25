@@ -5,7 +5,7 @@
 from flask_restful import Resource
 from flask import request
 from app.models.shop import shop_license, ctd_license, Status
-from app.utils.response import general_response
+from app.api_1_0.response import general_response
 from app.utils.login import permission_required
 from app.models.role import Permission
 from flask_login import login_required
