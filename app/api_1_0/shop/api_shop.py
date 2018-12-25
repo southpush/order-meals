@@ -132,8 +132,11 @@ class shop_license_application(Resource):
         if not user.shop:
             return general_response(err_code=303, status_code=404)
         else:
-            info = user.shop.license.get_license_dict()
-            return general_response(info=info)
+            if user.shop.license:
+                info = user.shop.license.get_license_dict()
+                return general_response(info=info)
+            else:
+                return general_response(err_code=708, status_code=404)
 
     @login_required_shop()
     def post(self, user):
