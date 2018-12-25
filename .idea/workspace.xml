@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5d925ea7-5644-4103-b756-7dfa96831faa" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/app/models/shop.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/shop.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api_1_0/personal/api_food.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api_1_0/personal/api_food.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api_1_0/response.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api_1_0/response.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,7 +17,7 @@
     <SUITE FILE_PATH="coverage/ordermeals$pppp.coverage" NAME="pppp Coverage Results" MODIFIED="1542681417167" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ordermeals$Unittests_for_test_user_model_UserModelTestCase_test_token_verify.coverage" NAME="Unittests for test_user_model.UserModelTestCase.test_token_verify Coverage Results" MODIFIED="1543475294133" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/ordermeals$Unittests_for_test_client_FlaskClientTestCase.coverage" NAME="Unittests for test_client.FlaskClientTestCase Coverage Results" MODIFIED="1544599809304" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/ordermeals$ordermeals.coverage" NAME="ordermeals Coverage Results" MODIFIED="1545728917774" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ordermeals$ordermeals.coverage" NAME="ordermeals Coverage Results" MODIFIED="1545729992092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ordermeals$rushhhhh.coverage" NAME="rushhhhh Coverage Results" MODIFIED="1545267212973" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/ordermeals$Unittests_for_test_client_FlaskClientTestCase_test_add_user.coverage" NAME="Unittests for test_client.FlaskClientTestCase.test_add_user Coverage Results" MODIFIED="1544513329929" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/ordermeals$Flask__app___init___py_create_app_.coverage" NAME="Flask (app/__init__.py:create_app) Coverage Results" MODIFIED="1542781888655" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
@@ -44,31 +45,13 @@
       <file leaf-file-name="response.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/api_1_0/response.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
-              <caret line="196" column="23" lean-forward="true" selection-start-line="196" selection-start-column="23" selection-end-line="196" selection-end-column="23" />
+            <state relative-caret-position="255">
+              <caret line="158" column="19" selection-start-line="158" selection-start-column="19" selection-end-line="158" selection-end-column="19" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/main/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="11" selection-start-line="11" selection-end-line="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/templates/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="9" column="52" selection-start-line="9" selection-start-column="52" selection-end-line="9" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="api_shop.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="api_shop.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/api_1_0/admin/api_shop.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="144">
@@ -113,10 +96,22 @@
       <file leaf-file-name="shop.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models/shop.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="241" column="36" lean-forward="true" selection-start-line="241" selection-start-column="36" selection-end-line="241" selection-end-column="36" />
+            <state relative-caret-position="198">
+              <caret line="243" column="12" lean-forward="true" selection-start-line="243" selection-start-column="12" selection-end-line="243" selection-end-column="12" />
               <folding>
                 <element signature="e#24#53#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="api_food.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/api_1_0/personal/api_food.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="201">
+              <caret line="61" column="65" selection-start-line="61" selection-start-column="65" selection-end-line="61" selection-end-column="65" />
+              <folding>
+                <element signature="e#24#35#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -222,7 +217,6 @@
         <option value="$PROJECT_DIR$/app/api_1_0/personal/api_route.py" />
         <option value="$PROJECT_DIR$/app/api_1_0/shop/api_user.py" />
         <option value="$PROJECT_DIR$/app/api_1_0/shop/api_route.py" />
-        <option value="$PROJECT_DIR$/app/api_1_0/personal/api_food.py" />
         <option value="$PROJECT_DIR$/app/db/user_db.py" />
         <option value="$PROJECT_DIR$/app/api_1_0/general/api_general.py" />
         <option value="$PROJECT_DIR$/app/api_1_0/general/api_route.py" />
@@ -248,9 +242,10 @@
         <option value="$PROJECT_DIR$/app/utils/login.py" />
         <option value="$PROJECT_DIR$/app/main/views.py" />
         <option value="$PROJECT_DIR$/app/api_1_0/admin/api_order.py" />
-        <option value="$PROJECT_DIR$/app/api_1_0/response.py" />
         <option value="$PROJECT_DIR$/app/models/shop.py" />
         <option value="$PROJECT_DIR$/app/api_1_0/admin/api_shop.py" />
+        <option value="$PROJECT_DIR$/app/api_1_0/response.py" />
+        <option value="$PROJECT_DIR$/app/api_1_0/personal/api_food.py" />
       </list>
     </option>
   </component>
@@ -263,10 +258,10 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="725" />
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="241" />
     <option name="y" value="1" />
-    <option name="width" value="1203" />
+    <option name="width" value="1688" />
     <option name="height" value="1049" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -302,6 +297,13 @@
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="api_1_0" type="462c0819:PsiDirectoryNode" />
               <item name="admin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ordermeals" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ordermeals" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="api_1_0" type="462c0819:PsiDirectoryNode" />
+              <item name="personal" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ordermeals" type="b2602c69:ProjectViewProjectNode" />
@@ -566,7 +568,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="580" y="1" width="962" height="839" extended-state="0" />
+    <frame x="193" y="1" width="1350" height="839" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.6419214" />
@@ -576,7 +578,7 @@
       <window_info anchor="bottom" id="Python Console" order="11" weight="0.5964654" />
       <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4939759" visible="true" weight="0.47345132" />
       <window_info anchor="bottom" x="22" y="258" width="1492" height="318" id="Terminal" order="12" weight="0.40117994" />
-      <window_info content_ui="combo" id="Project" order="2" sideWeight="0.49532712" visible="true" weight="0.19579646" />
+      <window_info content_ui="combo" id="Project" order="2" sideWeight="0.49532712" weight="0.21695258" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="4" weight="0.26980197" />
       <window_info anchor="right" id="SciView" order="3" weight="0.32838285" />
@@ -646,13 +648,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/werkzeug/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="922" selection-start-line="922" selection-end-line="922" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/main/auth.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
@@ -667,13 +662,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2341">
           <caret line="149" column="22" selection-start-line="149" selection-start-column="22" selection-end-line="149" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/api_1_0/personal/api_food.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="20" column="12" lean-forward="true" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -925,13 +913,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/api_1_0/response.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="196" column="23" lean-forward="true" selection-start-line="196" selection-start-column="23" selection-end-line="196" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/api_1_0/admin/api_order.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
@@ -963,16 +944,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/shop.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="241" column="36" lean-forward="true" selection-start-line="241" selection-start-column="36" selection-end-line="241" selection-end-column="36" />
-          <folding>
-            <element signature="e#24#53#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/api_1_0/shop/api_shop.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="377">
@@ -989,6 +960,40 @@
           <caret line="113" column="4" selection-start-line="113" selection-start-column="4" selection-end-line="114" selection-end-column="73" />
           <folding>
             <element signature="e#87#121#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/shop.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="243" column="12" lean-forward="true" selection-start-line="243" selection-start-column="12" selection-end-line="243" selection-end-column="12" />
+          <folding>
+            <element signature="e#24#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python35/Lib/json/decoder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="356" selection-start-line="356" selection-end-line="356" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api_1_0/response.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="158" column="19" selection-start-line="158" selection-start-column="19" selection-end-line="158" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api_1_0/personal/api_food.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="61" column="65" selection-start-line="61" selection-start-column="65" selection-end-line="61" selection-end-column="65" />
+          <folding>
+            <element signature="e#24#35#0" expanded="true" />
           </folding>
         </state>
       </provider>

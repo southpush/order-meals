@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 from datetime import datetime
+from json import JSONDecodeError
 
 from flask_restful import Resource, reqparse
 
@@ -54,7 +55,11 @@ class personal_orders(Resource):
         data.add_argument("item_list", type=str)
         data.add_argument("shop_id", type=int)
         data.add_argument("address_id", type=int)
-        item_list = json.loads(data.parse_args()["item_list"])
+        try:
+            item_list = json.loads(data.parse_args()["item_list"])
+        except JSONDecodeError as e:
+            print(e.__repr__())
+            return general_response(err_code=709, status_code=400)
         address_id = data.parse_args()["address_id"]
         shop_id = data.parse_args()["shop_id"]
 

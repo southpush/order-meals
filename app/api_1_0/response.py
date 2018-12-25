@@ -154,6 +154,10 @@ error_dict = {
         "message": "该商铺尚未递交许可申请。",
         "code": 708
     },
+    709: {
+        "message": "item_list的json格式错误。",
+        "code": 709
+    },
     1001: {
         "message": "手机号码/密码/角色不能为空",
         "code": 1001
