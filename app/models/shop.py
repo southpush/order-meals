@@ -65,7 +65,8 @@ class shop_info(db.Model):
             "address_dict": self.get_address_dict(),
             "address_str": self.get_address_str(),
             "lat": self.lat,
-            "lng": self.lng
+            "lng": self.lng,
+            "shop_id": self.id
         }
         return shop_dict
 

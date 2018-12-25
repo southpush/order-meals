@@ -25,7 +25,6 @@ class Admin( UserMixin, db.Model):
     admin_slat = db.Column(db.String(64))
     admin_phone = db.Column(db.String(11), unique=True)
     c_time = db.Column(db.DateTime, default=datetime.datetime.now)
-    head_img = db.Column(db.LargeBinary(length=2048), nullable=True)
 
     # 外键
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
