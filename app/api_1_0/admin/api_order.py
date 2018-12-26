@@ -40,7 +40,7 @@ class OrderGet(Resource):
                 else:
                     start_time = starttime
                     end_time = endtime
-                Orders = orders.query.filter_by(shop_id=i.id).filter(
+                Orders = orders.query.filter_by(shop_id=i.id, status=order_status.completed).filter(
                     orders.pay_time.between(start_time, str(end_time) + " 23:59:59")).all()
 
                 l.append(ctd_shop_order(i, Orders))
@@ -72,7 +72,7 @@ class OrderShopGet(Resource):
     @permission_required([Permission.SHOPERADMIN, Permission.ADMINISTER])
     def get(self):
         shop_id = request.args.get('id')
-        list = orders.query.filter_by(shop_id=shop_id).all()
+        list = orders.query.filter_by(shop_id=shop_id, status=order_status.completed).all()
         l = []
         if len(list) == 0:
             return general_response(err_code=1010)
