@@ -17,7 +17,7 @@ class UserGet(Resource):
     def get(self):
         page = int(request.args.get('page'))
         print(page)
-        pag = user_personal.query.filter().order_by(user_personal.id.asc()).paginate(page=page, per_page=1)
+        pag = user_personal.query.filter().order_by(user_personal.id.asc()).paginate(page=page, per_page=5)
         # for i in list:
         #     print(list[i])
         lists = pag.items
@@ -45,7 +45,7 @@ class GetByKeyWord(Resource):
         pag = user_personal.query.filter(
             and_(user_personal.phone.like("%" + phone + "%") if phone is not None else "",
                  user_personal.nickname.like("%" + name + "%") if name is not None else "")
-        ).order_by(user_personal.id.asc()).paginate(page=page,per_page=1)
+        ).order_by(user_personal.id.asc()).paginate(page=page,per_page=5)
         # print(pag)
         lists = pag.items
         # print(lists)

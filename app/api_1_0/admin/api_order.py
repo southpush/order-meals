@@ -23,7 +23,7 @@ class OrderGet(Resource):
         starttime = request.args.get('starttime')
         endtime = request.args.get('endtime')
         # 分页查询
-        pag = shop_info.query.filter().order_by(shop_info.id.asc()).paginate(page=page, per_page=1)
+        pag = shop_info.query.filter().order_by(shop_info.id.asc()).paginate(page=page, per_page=5)
         lists = pag.items
         # print(lists)
         total_page = pag.pages
@@ -91,7 +91,7 @@ class OrderBackGet(Resource):
     def get(self):
         page = int(request.args.get('page'))
         pag = orders.query.filter_by(status=order_status.shop_refuse).order_by(orders.id.asc()).paginate(page=page,
-                                                                                                         per_page=1)
+                                                                                                         per_page=5)
         lists = pag.items
         total_page = pag.pages
         if total_page == 0:

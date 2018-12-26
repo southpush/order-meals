@@ -371,6 +371,7 @@ class food_items(Resource):
         else:
             return general_response(err_code=406, status_code=404)
 
+
 # 食品规格的
 class food_specification(Resource):
     # 获取该食品的规格
@@ -567,4 +568,52 @@ class canceled_orders(Resource):
         else:
             return general_response(err_code=408, status_code=404)
 
+
+class waiting_for_delivery_order(Resource):
+    @login_required_shop()
+    def get(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("page", type=int)
+        page = data.parse_args()["page"]
+        pagination = user.shop.order.filter_by(status=order_status.waiting_for_delivery). \
+            order_by(orders.id.desc()).paginate(page, per_page=10, error_out=False)
+        order_list = []
+        for i in pagination.items:
+            d = {}
+            d.update(i.get_order_dict_shop())
+            order_list.append(d)
+        info = {
+            "order_list": order_list,
+            "has_next": pagination.has_next,
+            "page_here": pagination.page,
+            "per_page": pagination.per_page,
+            "total_pages": pagination.pages,
+            "total": pagination.total
+        }
+        return general_response(info=info)
+
+
+class arrived_order(Resource):
+    @login_required_shop()
+    def get(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("page", type=int)
+        page = data.parse_args()["page"]
+        pagination = user.shop.order.filter_by(status=order_status.arrived). \
+            order_by(orders.id.desc()).paginate(page, per_page=10, error_out=False)
+        order_list = []
+        print(pagination.items)
+        for i in pagination.items:
+            d = {}
+            d.update(i.get_order_dict_shop())
+            order_list.append(d)
+        info = {
+            "order_list": order_list,
+            "has_next": pagination.has_next,
+            "page_here": pagination.page,
+            "per_page": pagination.per_page,
+            "total_pages": pagination.pages,
+            "total": pagination.total
+        }
+        return general_response(info=info)
 

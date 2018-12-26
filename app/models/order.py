@@ -89,9 +89,9 @@ class orders(db.Model):
                 self.status = order_status.completed
                 db.session.commit()
         info = {
-            "create_time": self.create_time,
+            "create_time": self.create_time.strftime("%Y-%m-%d %H:%M:%S"),
             "total_price": self.total_price,
-            "total_items_num": self.total_items,
+            "total_items_num": self.total_items.strftime("%Y-%m-%d %H:%M:%S"),
             "shop_name": self.shop.shop_name,
             "status": self.status,
             "first_item": self.items.first().item_name,
@@ -105,7 +105,7 @@ class orders(db.Model):
         for i in self.items:
             items_list.append(i.get_item_dict())
         info = {
-            "pay_time": self.pay_time,
+            "pay_time": self.pay_time.strftime("%Y-%m-%d %H:%M:%S"),
             "address": self.address_str,
             "receiver": self.receiver,
             "contact_phone": self.contact_phone,

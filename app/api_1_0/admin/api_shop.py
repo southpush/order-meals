@@ -129,7 +129,7 @@ class ShopGet(Resource):
         pag = shop_info.query.filter(
             and_(shop_info.owner_id.in_(owner_id),
                  shop_info.shop_name.like("%" + name + "%") if name is not None else "")
-        ).order_by(shop_info.id.asc()).paginate(page=page, per_page=1)
+        ).order_by(shop_info.id.asc()).paginate(page=page, per_page=5)
 
         lists = pag.items
         total_page = pag.pages

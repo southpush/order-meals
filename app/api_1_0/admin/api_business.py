@@ -31,7 +31,7 @@ class BusinessGet(Resource):
         pag = user_shop.query.filter(
             and_(user_shop.phone.like("%" + phone + "%") if phone is not None else "",
                  user_shop.nickname.like("%" + name + "%") if name is not None else "")
-        ).order_by(user_shop.id.asc()).paginate(page=page, per_page=1)
+        ).order_by(user_shop.id.asc()).paginate(page=page, per_page=5)
 
         lists = pag.items
         total_page = pag.pages  # 总页数
