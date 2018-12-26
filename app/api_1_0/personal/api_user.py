@@ -110,8 +110,13 @@ class user_info(Resource):
 
 class getTest(Resource):
     def get(self):
-
-        return general_response(err_code=2003)
+        data = reqparse.RequestParser()
+        data.add_argument("item_list", type=str)
+        print(data.parse_args()["item_list"])
+        item_list = json.loads(data.parse_args()["item_list"])
+        print(item_list)
+        print(item_list[0]["that"])
+        return general_response()
 
 
 class getTest2(Resource):

@@ -318,18 +318,25 @@ class food_items(Resource):
     @login_required_shop()
     def post(self, user):
         data = reqparse.RequestParser()
-        data.add_argument("item_list", type=str)
-        item_list = json.loads(data.parse_args()["item_list"])
-        for item in item_list:
+        data.add_argument("item_name", type=str)
+        data.add_argument("item_price", type=float)
+        data.add_argument("item_introduction", type=str)
+        data.add_argument("category", type=str)
+        item_name = data.parse_args()["item_name"]
+        item_price = data.parse_args()["item_price"]
+        item_introduction = data.parse_args()["item_introduction"]
+        item_price = data.parse_args()["item_price"]
+        category_name = data.parse_args()["category"]
+        if category_name:
             category = item_category.query.filter(item_category.shop_id == user.shop.id).\
-                filter_by(category_name=item["category"]).first()
+                filter_by(category_name=category_name).first()
             # 要判断有没有这个类别，没有就要新建一个
             if not category:
-                category = item_category(category_name=item['category'], shop_id=user.shop.id)
+                category = item_category(category_name=category_name, shop_id=user.shop.id)
                 add_in_db(category)
-            new_item = shop_items(item_name=item["item_info"]["item_name"],
-                                  item_price=float(item["item_info"]["item_price"]),
-                                  item_introduction=item["item_info"]["item_introduction"],
+            new_item = shop_items(item_name=item_name,
+                                  item_price=float(item_price),
+                                  item_introduction=item_introduction,
                                   shop_id=user.shop.id, item_category_id=category.id)
             add_in_db(new_item)
         return general_response()
