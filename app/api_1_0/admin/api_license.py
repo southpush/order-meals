@@ -4,7 +4,8 @@
 # @Version : 1.0
 from flask_restful import Resource
 from flask import request
-from app.models.shop import shop_license, ctd_license, Status
+
+from app.models.shop import shop_license, ctd_license, Status, shop_info
 from app.api_1_0.response import general_response
 from app.utils.login import permission_required
 from app.models.role import Permission
@@ -41,9 +42,14 @@ class LicensePass(Resource):
         # 通过审核
         id = request.args.get("id")
         Shop_license = shop_license.query.filter_by(id=id).first()
+        shop_id = Shop_license.shop_id
+        Shop_info = shop_info.query.filter_by(id=shop_id).first()
         # 如果status为未审核或不通过 则进行审核
-        if Shop_license.status == Status.IN_EXAMINE or Shop_license.status == Status.LICENSE_NOT_PASS:
+        if Shop_license.status != Status.LICENSE_PASS:
             status = Status.LICENSE_PASS
+            if Shop_info.status == Status.EXAMINE_PASS:
+                status = Status.PASS
+                shop_info.query.filter_by(id=shop_id).update({"status": status})
             try:
                 # 审核通过，修改对应status
                 what = shop_license.query.filter_by(id=id)

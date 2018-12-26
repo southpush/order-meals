@@ -43,9 +43,13 @@ class ShopPass(Resource):
         # 商铺信息通过审核
         id = request.args.get("id")
         Shop_info = shop_info.query.filter_by(id=id).first()
+        license_id = Shop_info.license.id
+        Shop_license = shop_license.query.filter_by(id=license_id).first()
         # 如果状态为未审核或不通过 则进行审核
-        if Shop_info.status == Status.IN_SHOP or Shop_info.status == Status.EXAMINE_NOT_PASS:
+        if Shop_info.status != Status.EXAMINE_PASS:
             status = Status.EXAMINE_PASS
+            if Shop_license.status == Status.LICENSE_PASS:
+                status = Status.PASS
             try:
                 # 修改对应状态信息
                 what = shop_info.query.filter_by(id=id)
@@ -68,6 +72,8 @@ class ShopNotPass(Resource):
         # 商铺信息不通过审核
         id = request.args.get("id")
         Shop_info = shop_info.query.filter_by(id=id).first()
+        # license_id = shop_info.license.id
+        # Shop_license = shop_license.query.filter_by(id=license_id).first()
         # 如果状态为未审核 则进行审核
         if Shop_info.status == Status.IN_SHOP:
             status = Status.EXAMINE_NOT_PASS
