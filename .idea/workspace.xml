@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5d925ea7-5644-4103-b756-7dfa96831faa" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api_1_0/admin/api_business.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api_1_0/admin/api_business.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api_1_0/admin/api_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api_1_0/admin/api_order.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api_1_0/admin/api_shop.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api_1_0/admin/api_shop.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api_1_0/admin/api_user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api_1_0/admin/api_user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api_1_0/shop/api_route.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api_1_0/shop/api_route.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api_1_0/shop/api_shop.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api_1_0/shop/api_shop.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models/order.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/order.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/shop.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/shop.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -54,8 +48,8 @@
             <file leaf-file-name="api_shop.py" pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/app/api_1_0/shop/api_shop.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="684">
-                    <caret line="582" column="45" selection-start-line="582" selection-start-column="45" selection-end-line="582" selection-end-column="45" />
+                  <state relative-caret-position="200">
+                    <caret line="383" column="53" lean-forward="true" selection-start-line="383" selection-start-column="53" selection-end-line="383" selection-end-column="53" />
                     <folding>
                       <element signature="e#21481#22307#0" />
                       <element signature="e#22383#22885#0" />
@@ -104,15 +98,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="api_route.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/api_1_0/admin/api_route.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-308">
-              <caret line="1" column="29" selection-start-line="1" selection-start-column="29" selection-end-line="1" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="api_general.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/api_1_0/general/api_general.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -122,11 +107,28 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="shop.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/models/shop.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="389">
+              <caret line="21" column="59" selection-start-line="21" selection-start-column="59" selection-end-line="21" selection-end-column="59" />
+              <folding>
+                <element signature="e#24#53#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="api_orders.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/api_1_0/shop/api_orders.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
       <file leaf-file-name="order.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/models/order.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="543">
-              <caret line="209" column="34" lean-forward="true" selection-start-line="209" selection-start-column="34" selection-end-line="209" selection-end-column="34" />
+            <state relative-caret-position="169">
+              <caret line="90" column="16" lean-forward="true" selection-start-line="90" selection-start-column="16" selection-end-line="90" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -159,18 +161,6 @@
               <caret line="52" column="46" selection-start-line="52" selection-start-column="46" selection-end-line="52" selection-end-column="46" />
               <folding>
                 <element signature="e#87#131#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="api_order.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/api_1_0/admin/api_order.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="93" column="115" selection-start-line="93" selection-start-column="115" selection-end-line="93" selection-end-column="115" />
-              <folding>
-                <element signature="e#88#122#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -276,14 +266,14 @@
         <option value="$PROJECT_DIR$/app/main/views.py" />
         <option value="$PROJECT_DIR$/app/api_1_0/response.py" />
         <option value="$PROJECT_DIR$/app/api_1_0/personal/api_food.py" />
-        <option value="$PROJECT_DIR$/app/models/shop.py" />
         <option value="$PROJECT_DIR$/app/api_1_0/admin/api_business.py" />
         <option value="$PROJECT_DIR$/app/api_1_0/admin/api_order.py" />
         <option value="$PROJECT_DIR$/app/api_1_0/admin/api_shop.py" />
         <option value="$PROJECT_DIR$/app/api_1_0/admin/api_user.py" />
-        <option value="$PROJECT_DIR$/app/models/order.py" />
         <option value="$PROJECT_DIR$/app/api_1_0/shop/api_route.py" />
         <option value="$PROJECT_DIR$/app/api_1_0/shop/api_shop.py" />
+        <option value="$PROJECT_DIR$/app/models/shop.py" />
+        <option value="$PROJECT_DIR$/app/models/order.py" />
       </list>
     </option>
   </component>
@@ -298,7 +288,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
-    <option name="width" value="1262" />
+    <option name="width" value="1520" />
     <option name="height" value="1050" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -592,7 +582,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="0" width="1009" height="840" extended-state="0" />
+    <frame x="-6" y="0" width="1216" height="840" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.6419214" />
       <window_info anchor="bottom" id="Event Log" order="14" sideWeight="0.5060241" side_tool="true" weight="0.49337262" />
@@ -601,7 +592,7 @@
       <window_info anchor="bottom" id="Python Console" order="11" weight="0.5964654" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4939759" weight="0.44182622" />
       <window_info anchor="bottom" x="22" y="258" width="1492" height="318" id="Terminal" order="12" weight="0.40117994" />
-      <window_info active="true" content_ui="combo" id="Project" order="2" sideWeight="0.49532712" visible="true" weight="0.26498422" />
+      <window_info active="true" content_ui="combo" id="Project" order="2" sideWeight="0.49532712" visible="true" weight="0.17184801" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="4" weight="0.26980197" />
       <window_info anchor="right" id="SciView" order="3" weight="0.32838285" />
@@ -661,13 +652,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/main/auth.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="15" column="66" selection-start-line="15" selection-start-column="66" selection-end-line="15" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/static/shop_image/default.jpg">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -940,16 +924,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/shop.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3499">
-          <caret line="310" column="49" lean-forward="true" selection-start-line="310" selection-start-column="49" selection-end-line="310" selection-end-column="49" />
-          <folding>
-            <element signature="e#24#53#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/api_1_0/general/api_general.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2530">
@@ -974,17 +948,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/api_1_0/shop/api_shop.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="684">
-          <caret line="582" column="45" selection-start-line="582" selection-start-column="45" selection-end-line="582" selection-end-column="45" />
-          <folding>
-            <element signature="e#21481#22307#0" />
-            <element signature="e#22383#22885#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/api_1_0/shop/api_route.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="343">
@@ -1002,10 +965,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/api_1_0/shop/api_shop.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="383" column="53" lean-forward="true" selection-start-line="383" selection-start-column="53" selection-end-line="383" selection-end-column="53" />
+          <folding>
+            <element signature="e#21481#22307#0" />
+            <element signature="e#22383#22885#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/shop.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="389">
+          <caret line="21" column="59" selection-start-line="21" selection-start-column="59" selection-end-line="21" selection-end-column="59" />
+          <folding>
+            <element signature="e#24#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/api_1_0/shop/api_orders.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/models/order.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="543">
-          <caret line="209" column="34" lean-forward="true" selection-start-line="209" selection-start-column="34" selection-end-line="209" selection-end-column="34" />
+        <state relative-caret-position="169">
+          <caret line="90" column="16" lean-forward="true" selection-start-line="90" selection-start-column="16" selection-end-line="90" selection-end-column="16" />
         </state>
       </provider>
     </entry>

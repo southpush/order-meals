@@ -91,7 +91,7 @@ class orders(db.Model):
         info = {
             "create_time": self.create_time.strftime("%Y-%m-%d %H:%M:%S"),
             "total_price": self.total_price,
-            "total_items_num": self.total_items.strftime("%Y-%m-%d %H:%M:%S"),
+            "total_items_num": self.total_items,
             "shop_name": self.shop.shop_name,
             "status": self.status,
             "first_item": self.items.first().item_name,

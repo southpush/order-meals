@@ -19,7 +19,7 @@ class shop_info(db.Model):
     score = db.Column(db.Float, nullable=True, default=0)
     shop_img_name = db.Column(db.String(50), nullable=False, default="default.jpg")
     box_price = db.Column(db.Float, nullable=True, default=0)
-    status = db.Column(db.Integer, nullable=False, default=10)
+    status = db.Column(db.Integer, nullable=False, default=0)
 
     # 商铺地址
     province = db.Column(db.Integer, nullable=False)
