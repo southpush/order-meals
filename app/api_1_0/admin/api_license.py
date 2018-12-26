@@ -50,16 +50,16 @@ class LicensePass(Resource):
             if Shop_info.status == Status.EXAMINE_PASS:
                 status = Status.PASS
                 shop_info.query.filter_by(id=shop_id).update({"status": status})
-            try:
-                # 审核通过，修改对应status
-                what = shop_license.query.filter_by(id=id)
-                what.update({'status': status})
-                update_in_db(what)
-                print('success')
-            except Exception as e:
-                # db.session.rollback()
-                print('failed')
-                print(e)
+        try:
+            # 审核通过，修改对应status
+            what = shop_license.query.filter_by(id=id)
+            what.update({'status': status})
+            update_in_db(what)
+            print('success')
+        except Exception as e:
+            # db.session.rollback()
+            print('failed')
+            print(e)
         result = ctd_license(Shop_license)
         return general_response(info={'result': result})
 
