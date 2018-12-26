@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 
 import requests
+from flask import request
 from pymysql import IntegrityError
 
 from app import glovar
@@ -71,6 +72,7 @@ class shop_info_application(Resource):
 
     @login_required_shop()
     def put(self, user):
+        print(request)
         shop = user.shop
 
         if not shop:
@@ -332,6 +334,42 @@ class food_items(Resource):
             add_in_db(new_item)
         return general_response()
 
+    @login_required_shop()
+    def put(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("item_id", type=int)
+        data.add_argument("item_name", type=str)
+        data.add_argument("item_introduction", type=str)
+        data.add_argument("item_price", type=float)
+
+        item_id = data.parse_args()["item_id"]
+        item_name = data.parse_args()["item_name"]
+        item_introduction = data.parse_args()["item_introduction"]
+        item_price = data.parse_args()["item_price"]
+
+        if not (item_id and item_name and item_introduction and item_price):
+            return general_response(err_code=101, status_code=400)
+        item = user.shop.items.filter_by(id=item_id).first()
+        if item:
+            item.item_name = item_name
+            item.item_introduction = item_introduction
+            item.item_price = item_price
+            update_in_db(item)
+            return general_response()
+        else:
+            return general_response(err_code=406, status_code=404)
+
+    @login_required_shop()
+    def delete(self, user):
+        data = reqparse.RequestParser()
+        data.add_argument("item_id", type=int)
+        item_id = data.parse_args()["item_id"]
+        item = user.shop.items.filter_by(id=item_id).first()
+        if item:
+            delete_in_db(item)
+            return general_response()
+        else:
+            return general_response(err_code=406, status_code=404)
 
 # 食品规格的
 class food_specification(Resource):
