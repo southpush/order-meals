@@ -112,7 +112,8 @@ class orders(db.Model):
             "total_price": self.total_price,
             "total_items_num": self.total_items,
             "status": self.status,
-            "items_list": items_list
+            "items_list": items_list,
+            "order_id": self.id
         }
         return info
 
