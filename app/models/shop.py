@@ -314,5 +314,8 @@ def ctd_license(obj):
         'service_address': obj.service_address,
         'service_begin_time': obj.service_begin_time,
         'service_end_time': obj.service_end_time,
+        "idcard_img": obj.idcard_image_name,
+        "business_img": obj.business_image_name,
+        "service_img": obj.service_image_name
 
     }
