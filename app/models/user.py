@@ -137,13 +137,17 @@ def ctd(obj):
     # result = json.dumps(obj, default=lambda obj: obj.__dict__)
     # return result
     Address = address.query.filter_by(id=obj.id).first()
+    if Address is None:
+        address_str = ''
+    else:
+        address_str = Address.get_address_str()
     return {
         'id': obj.id,
         'openid': obj.openid,
         'phone': obj.phone,
         'password_hash': obj.password_hash,
         'nickname': obj.nickname,
-        'address': Address.get_address_str(),
+        'address': address_str,
         'head_image_name': obj.head_image_name
     }
 
